@@ -1,0 +1,25 @@
+.categoryItem {
+  &:hover {
+    cursor: pointer;
+  }
+
+  &__image {
+    opacity: 0.5
+  }
+
+  &__title {
+    display: block
+  }
+
+  &__imgOverlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px; 
+  }
+
+  &__button {
+    position: absolute;
+    margin-top: 6rem;
+  }
+}
