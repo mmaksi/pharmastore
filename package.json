@@ -1,0 +1,25 @@
+{
+  "name": "tech-pharm",
+  "version": "1.0.0",
+  "description": "des",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmaksi/tech-pharm.git"
+  },
+  "keywords": [
+    "online",
+    "pharmacy",
+    "drug",
+    "store"
+  ],
+  "author": "Mark Maksi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmaksi/tech-pharm/issues"
+  },
+  "homepage": "https://github.com/mmaksi/tech-pharm#readme"
+}
