@@ -1,0 +1,49 @@
+$sidenav--color: #51557E;
+.dashboardNav {
+  height: 100%;
+  width: 180px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: $sidenav--color;
+  overflow-x: hidden;
+  padding-top: 20px;
+
+  &__option {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    color: #D6D5A8;
+    display: block;
+
+    &--add:hover {
+      cursor: pointer;
+      color: #f1f1f1;
+    }
+
+    &--remove:hover {
+      cursor: pointer;
+      color: #f1f1f1;
+    }
+  }
+
+  &__main {
+    margin-left: 180px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+  }
+}
+
+.dashboardBody__form {
+  width: 50%;
+}
+
+@media screen and (max-height: 450px) {
+  .dashboardNav {
+    padding-top: 15px;
+
+    &__option {
+      font-size: 18px;
+    }
+  }
+}
