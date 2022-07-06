@@ -5,7 +5,7 @@ import CategoriesPage from "./Pages/CategoriesPage";
 import Login from "./Pages/LoginPage";
 import Navigation from "./Pages/Navigation";
 import Register from "./Pages/RegisterPage";
-import Admin from "./Pages/Admin";
+import Dashboard from "./Pages/Dashboard";
 
 function App() {
   return (
@@ -14,9 +14,10 @@ function App() {
         <Route path="/" element={<Navigation />}>
           <Route index element={<CategoriesPage />} />
           <Route path="categories" element={<CategoriesPage />}></Route>
-          <Route path="categories/:categoryName" element={<Category />} />
+          <Route path="/:categoryName" element={<Category />} />
           <Route path="register" element={<Register />} />
-          <Route path="login" element={<Admin />} />
+          <Route path="login" element={<Login />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="checkout" element={<Checkout />} />
         </Route>
       </Routes>

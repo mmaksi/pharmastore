@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { Col, Card, Button } from "react-bootstrap";
-import "./categoryItem.scss";
+import "./CategoriesCard.scss";
 
 const CategoryItem = ({ title, img }) => {
   const navigate = useNavigate();
 
   const shopHandler = () => {
-    navigate(`/categories/${title.toLocaleLowerCase()}`)
-  }
+    navigate(`/${title.toLocaleLowerCase()}`);
+  };
 
   return (
     <Col>
@@ -19,8 +19,15 @@ const CategoryItem = ({ title, img }) => {
             className="text-center text-uppercase font-weight-bold"
           >
             {title}
-          </Card.Title> 
-          <Button className="categoryItem__button" variant="outline-light" size="lg" onClick={shopHandler}>SHOP DRUGS</Button>
+          </Card.Title>
+          <Button
+            className="categoryItem__button"
+            variant="outline-light"
+            size="lg"
+            onClick={shopHandler}
+          >
+            SHOP DRUGS
+          </Button>
         </Card.ImgOverlay>
       </Card>
     </Col>

@@ -1,5 +1,5 @@
 import { Container, Row, } from "react-bootstrap";
-import CategoryItem from "../components/CategoryItem";
+import CategoryItem from "../components/CategoriesCard";
 
 const CategoriesPage = () => {
   return (

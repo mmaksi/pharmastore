@@ -1,6 +1,9 @@
 import {Row, Col, Card} from "react-bootstrap"
+import { useParams } from "react-router-dom";
 
 const Category = () => {
+  const {categoryName} = useParams() // use it to query the database
+
   return (
     <Row xs={1} md={4} className="g-4">
       {Array.from({ length: 5 }).map((_, idx) => (
