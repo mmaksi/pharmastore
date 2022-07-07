@@ -7,6 +7,7 @@ import Navigation from "./Pages/Navigation";
 import Register from "./Pages/RegisterPage";
 import Dashboard from "./Pages/Dashboard";
 
+
 function App() {
   return (
     <div>
