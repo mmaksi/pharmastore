@@ -6,7 +6,7 @@ const CategoryItem = ({ title, img }) => {
   const navigate = useNavigate();
 
   const shopHandler = () => {
-    navigate(`/${title.toLocaleLowerCase()}`);
+    navigate(`/${title.replace(/ /g, "-").toLocaleLowerCase()}`);
   };
 
   return (

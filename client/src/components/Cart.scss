@@ -1,16 +1,10 @@
-.cart {
-  &:hover {
-    cursor: pointer;
-  }
-}
-
 .cartCount {
   font-size: 12px;
   background: #771315;
   color: #fff;
   padding: 0 5px;
   vertical-align: top;
-  margin-left: -10px;
+  margin-left: -8px;
 
   &__badge {
     padding-left: 9px;

@@ -19,6 +19,7 @@ const httpGetCategoryProducts = async (req, res) => {
 
 const httpAddProduct = async (req, res) => {
   let product = req.body;
+  console.log(product)
   if (
     !product.productName ||
     !product.category ||

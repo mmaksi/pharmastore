@@ -1,30 +1,36 @@
-import { Outlet } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faRightToBracket, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { Navbar, Nav, Container } from "react-bootstrap";
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer } from "react-router-bootstrap";
+import { Outlet } from "react-router-dom";
 import Cart from "../components/Cart";
+import { useSelector } from "react-redux";
+import { selectCartCount } from "../store/cart/cart.selector";
 
 const Navigation = () => {
+  const cartCount = useSelector(selectCartCount)
+
   return (
     <>
       <Navbar className="p-3 mb-3" bg="dark" variant="dark" sticky="top">
         <Container>
-          <Navbar.Brand href="/">PHARMSHOP</Navbar.Brand>
+          <Navbar.Brand href="/">PHARMASTORE</Navbar.Brand>
           <Nav className="ms-auto">
             <LinkContainer to="/register">
-              <Nav.Link className="h5">Register</Nav.Link>
+              <Nav.Link>Register</Nav.Link>
             </LinkContainer>
 
             <LinkContainer to="/login">
-              <Nav.Link className="h5">Login</Nav.Link>
+              <Nav.Link>Login</Nav.Link>
             </LinkContainer>
 
             <LinkContainer to="/dashboard">
-              <Nav.Link className="h5">Dashboard</Nav.Link>
+              <Nav.Link>Dashboard</Nav.Link>
             </LinkContainer>
 
-            <Navbar.Text className="h5 ps-2">
-              <Cart />
-            </Navbar.Text>
+            <LinkContainer to="/dashboard">
+              <Nav.Link><Cart count={cartCount}/></Nav.Link>
+            </LinkContainer>
           </Nav>
         </Container>
       </Navbar>

@@ -2,14 +2,47 @@ import { useState } from "react";
 import { Container, Form, Button, Modal } from "react-bootstrap";
 import "./DashboardForm.scss";
 import ModalConfirm from "./ModalConfirm";
+import Title from "./Title";
+import axios from "axios"
 
-const DashboardForm = ({ title, labels, btnDetails, placeholders, types }) => {
+const DashboardForm = ({ title, labels, btnDetails, placeholders, types, names }) => {
+  const [inputObject, setInputObject] = useState({})
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
+  const changeHandler = (e) => {
+    const inputName = e.target.name
+    const inputValue = e.target.value
+    setInputObject({...inputObject, [inputName]: inputValue})
+  }
+
+  const {productName, category, imageUrl, price} = inputObject
+
   const submitHandler = (e) => {
     e.preventDefault();
-    e.target.innerText === "Remove product" ? setShow(true) : setShow(false);
+    switch (e.target.innerText) {
+      case "Remove product":
+        setShow(true)
+        break;
+      case "Add product":
+        setShow(false)
+        axios.post('http://localhost:8000/v1/products', {
+          productName,
+          category,
+          imageUrl,
+          price: price
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+        break
+      default:
+        break;
+    }
+
   };
 
   return (
@@ -25,10 +58,7 @@ const DashboardForm = ({ title, labels, btnDetails, placeholders, types }) => {
       />
 
       {/* TITLE */}
-      <div className="dashboardBody__main text-center m-auto">
-        <h2>{title}</h2>
-        <hr style={{ width: "30%", margin: "auto" }} />
-      </div>
+      <Title title={title} />
 
       {/* FORM */}
       <Container className="text-center mt-3 pb-4">
@@ -37,8 +67,10 @@ const DashboardForm = ({ title, labels, btnDetails, placeholders, types }) => {
             <Form.Group key={label} className="mb-3">
               <Form.Label>{label}</Form.Label>
               <Form.Control
+                onChange={changeHandler}
                 type={types[index]}
                 placeholder={placeholders[index]}
+                name={names[index]}
               />
             </Form.Group>
           ))}

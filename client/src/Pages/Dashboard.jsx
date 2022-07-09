@@ -24,6 +24,7 @@ const Admin = () => {
           ]}
           btnDetails={{ title: "Add product", type: "submit" }}
           types={["text", "text", "text", "text"]}
+          names={["productName", "category", "imageUrl", "price"]}
         />
       )}
 
@@ -36,6 +37,7 @@ const Admin = () => {
           ]}
           btnDetails={{ title: "Remove product", type: "submit" }}
           types={["text"]}
+          names={["productName"]}
         />
       )}
     </div>

@@ -1,13 +1,13 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import "./Cart.scss";
 
-const Cart = () => {
+const Cart = ({count}) => {
   return (
     <>
-      <i className="fa cart" style={{ fontSize: "18px" }}>
-        &#xf07a;
-      </i>
+     <FontAwesomeIcon icon={faCartShopping} />
       <span className="cartCount cartCount__badge">
-        5
+        {count}
       </span>
     </>
   );

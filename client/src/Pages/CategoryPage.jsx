@@ -1,27 +1,129 @@
-import {Row, Col, Card} from "react-bootstrap"
-import { useParams } from "react-router-dom";
+import { Fragment, useEffect } from "react";
+import {
+  Row,
+  Col,
+  Card,
+  Container,
+  ListGroup,
+  Button,
+  Form,
+} from "react-bootstrap";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import fetchProductsStartAsync from "../store/products/products.action";
+import { selectProducts } from "../store/products/products.selector";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import Title from "../components/Title";
+import { selectCartItems } from "../store/cart/cart.selector";
+import { addItemToCart } from "../store/cart/cart.action";
+import { useState } from "react";
+
+// {productName: '', category: '', imageUrl: '', price: 0, productId: ''}
 
 const Category = () => {
-  const {categoryName} = useParams() // use it to query the database
+  const [quantity, setQuantity] = useState(0)
+  const { categoryName } = useParams(); // use it to query the database
+  const dispatch = useDispatch();
+  const cartItems = useSelector(selectCartItems);
+
+  useEffect(() => {
+    dispatch(fetchProductsStartAsync(categoryName));
+  }, [dispatch, categoryName]);
+
+  const categoryProducts = useSelector(selectProducts);
+
+  const addToCartHandler = (_, selectedProduct) => {
+    const productToAdd = {...selectedProduct , quantity}
+    dispatch(addItemToCart(cartItems, productToAdd));
+  };
+
+  const quantityHandler = (event) => {
+    let selectedQuantity = +event.target.value
+    setQuantity(selectedQuantity);
+  }
 
   return (
-    <Row xs={1} md={4} className="g-4">
-      {Array.from({ length: 5 }).map((_, idx) => (
-        <Col>
-          <Card>
-            <Card.Img variant="top" src="holder.js/100px160" />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a longer card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      ))}
-    </Row>
+    <>
+      {categoryProducts.length ? (
+        <Title title={categoryName} />
+      ) : (
+        <Title
+          width="60%"
+          title={`No products in ${categoryName.toUpperCase()} category yet.`}
+        />
+      )}
+      <Container>
+        <Link className="btn btn-light my-3" to="/">
+          <FontAwesomeIcon icon={faChevronLeft} /> Go Back
+        </Link>
+        <Row xs={1} md={4} className="g-4">
+          {categoryProducts.map((product, idx) => (
+            <Col className="mb-4" key={product.productId}>
+              <Card border="dark">
+                <Card.Img
+                  className="p-4"
+                  variant="top"
+                  src={product.imageUrl}
+                />
+                <Card.Body>
+                  <Card.Title className="text-center">
+                    {product.productName}
+                  </Card.Title>
+                </Card.Body>
+
+                <ListGroup variant="flush">
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Price:</Col>
+                      <Col>
+                        <strong>${product.price}</strong>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+
+                  {/* <ListGroup.Item>
+                    <Row>
+                      <Col>Status:</Col>
+                      <Col>
+                        {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
+                      </Col>
+                    </Row>
+                  </ListGroup.Item> */}
+
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Quantity:</Col>
+                      <Col>
+                        <Form.Select onChange={quantityHandler}>
+                          {[...Array(100).keys()].map((x) => (
+                            <option key={x + 1} value={x + 1}>
+                              {x + 1}
+                            </option>
+                          ))}
+                        </Form.Select>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    <Button
+                      className="w-100"
+                      type="button"
+                      variant="dark"
+                      onClick={(event) => addToCartHandler(event, product)}
+                      disabled={product.countInStock === 0}
+                    >
+                      Add To Cart
+                    </Button>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </>
   );
 };
 
