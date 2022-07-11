@@ -3,46 +3,57 @@ import { Container, Form, Button, Modal } from "react-bootstrap";
 import "./DashboardForm.scss";
 import ModalConfirm from "./ModalConfirm";
 import Title from "./Title";
-import axios from "axios"
+import axios from "axios";
 
-const DashboardForm = ({ title, labels, btnDetails, placeholders, types, names }) => {
-  const [inputObject, setInputObject] = useState({})
+const DashboardForm = ({
+  title,
+  labels,
+  btnDetails,
+  placeholders,
+  types,
+  names,
+  accepts
+}) => {
+  const [inputObject, setInputObject] = useState({});
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
   const changeHandler = (e) => {
-    const inputName = e.target.name
-    const inputValue = e.target.value
-    setInputObject({...inputObject, [inputName]: inputValue})
-  }
+    const inputName = e.target.name;
+    const inputValue = inputName === "imageUrl" ? URL.createObjectURL(e.target.files[0]) : e.target.value
+    console.log({ ...inputObject, [inputName]: inputValue });
+    setInputObject({ ...inputObject, [inputName]: inputValue });
+  };
 
-  const {productName, category, imageUrl, price} = inputObject
+  const { productName, category, imageUrl, price } = inputObject;
 
   const submitHandler = (e) => {
     e.preventDefault();
     switch (e.target.innerText) {
       case "Remove product":
-        setShow(true)
+        setShow(true);
         break;
+
       case "Add product":
-        setShow(false)
-        axios.post('http://localhost:8000/v1/products', {
-          productName,
-          category,
-          imageUrl,
-          price: price
-      })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-        break
+        setShow(false);
+        console.log({productName, category, imageUrl, price});
+        axios
+          .post("http://localhost:8000/v1/products", {
+            productName,
+            category,
+            imageUrl,
+            price,
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        break;
       default:
         break;
     }
-
   };
 
   return (
@@ -71,9 +82,11 @@ const DashboardForm = ({ title, labels, btnDetails, placeholders, types, names }
                 type={types[index]}
                 placeholder={placeholders[index]}
                 name={names[index]}
+                accept={accepts[index]}
               />
             </Form.Group>
           ))}
+
           <div className="d-grid gap-2">
             <Button
               variant="outline-dark"

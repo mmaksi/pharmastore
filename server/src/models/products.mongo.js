@@ -21,4 +21,4 @@ const productsSchema = new mongoose.Schema({
 });
 
 // Connects productsSchema with the "products" collection
-module.exports = mongoose.model('product', productsSchema);
+module.exports = mongoose.model('Product', productsSchema);

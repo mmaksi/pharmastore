@@ -19,10 +19,8 @@ import { selectCartItems } from "../store/cart/cart.selector";
 import { addItemToCart } from "../store/cart/cart.action";
 import { useState } from "react";
 
-// {productName: '', category: '', imageUrl: '', price: 0, productId: ''}
-
 const Category = () => {
-  const [quantity, setQuantity] = useState(0)
+  const [quantity, setQuantity] = useState(1)
   const { categoryName } = useParams(); // use it to query the database
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
@@ -36,6 +34,7 @@ const Category = () => {
   const addToCartHandler = (_, selectedProduct) => {
     const productToAdd = {...selectedProduct , quantity}
     dispatch(addItemToCart(cartItems, productToAdd));
+    setQuantity(1);
   };
 
   const quantityHandler = (event) => {

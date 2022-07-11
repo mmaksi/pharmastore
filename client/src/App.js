@@ -10,7 +10,7 @@ import Dashboard from "./Pages/Dashboard";
 
 function App() {
   return (
-    <div>
+    <>
       <Routes>
         <Route path="/" element={<Navigation />}>
           <Route index element={<CategoriesPage />} />
@@ -22,7 +22,7 @@ function App() {
           <Route path="checkout" element={<Checkout />} />
         </Route>
       </Routes>
-    </div>
+    </>
   );
 }
 

@@ -1,10 +1,10 @@
 const express = require("express");
-const { httpAddUser, httpGetUser } = require("./users.controller");
+const { httpAddUser, httpGetAllUsers, httpGetUser } = require("./users.controller");
 
 const usersRouter = express.Router();
 
-usersRouter.post("/generateToken", httpAddUser);
-usersRouter.get("/validateToken", httpGetUser);
-
+usersRouter.post("/", httpAddUser);
+usersRouter.get("/", httpGetAllUsers);
+usersRouter.get("/:userName", httpGetUser);
 
 module.exports = usersRouter;

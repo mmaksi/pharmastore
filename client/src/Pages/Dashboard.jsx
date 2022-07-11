@@ -1,11 +1,13 @@
 import { useState } from "react";
 import DashboardForm from "../components/DashboardForm";
 import DashboardNav from "../components/DashboardNav";
+import Orders from "../components/Orders";
 
 const Admin = () => {
   const [sideNavOptions, setSideNavOptions] = useState({
     addProduct: true,
     removeProduct: false,
+    showOrders: false
   });
 
   return (
@@ -15,16 +17,17 @@ const Admin = () => {
       {sideNavOptions.addProduct && (
         <DashboardForm
           title="Add a new product"
-          labels={["Product Name", "Category", "Image URL", "Product Price"]}
+          labels={["Product Name", "Product Category", "Product Price", "Product Image"]}
           placeholders={[
             "Product Name",
             "Product's Category",
-            "Paste the product's mage URL here",
             "Product's Price",
+            "Upload an image for the product",
           ]}
           btnDetails={{ title: "Add product", type: "submit" }}
-          types={["text", "text", "text", "text"]}
-          names={["productName", "category", "imageUrl", "price"]}
+          types={["text", "text", "text", "file"]}
+          names={["productName", "category", "price", "imageUrl"]}
+          accepts={[null, null, null, "image/*"]}
         />
       )}
 
@@ -39,6 +42,10 @@ const Admin = () => {
           types={["text"]}
           names={["productName"]}
         />
+      )}
+
+      {sideNavOptions.showOrders && (
+        <Orders />
       )}
     </div>
   );

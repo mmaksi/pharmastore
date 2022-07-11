@@ -1,14 +1,18 @@
 import "./DashboardNav.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleMinus, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { faCircleMinus, faCirclePlus, faStore } from "@fortawesome/free-solid-svg-icons";
 
 const DashboardNav = ({setSideNavOptions}) => {
   const setAddProduct = () => {
-    setSideNavOptions({addProduct: true, removeProduct: false})
+    setSideNavOptions({addProduct: true, removeProduct: false, showOrders: false})
   }
 
   const setRemoveProduct = () => {
-    setSideNavOptions({addProduct: false, removeProduct: true})
+    setSideNavOptions({addProduct: false, removeProduct: true, showOrders: false})
+  }
+
+  const setShowOrders = () => {
+    setSideNavOptions({addProduct: false, removeProduct: false, showOrders: true})
   }
 
   return (
@@ -22,6 +26,11 @@ const DashboardNav = ({setSideNavOptions}) => {
         <div className="dashboardNav__option--remove pb-3" onClick={setRemoveProduct}>
           <FontAwesomeIcon icon={faCircleMinus} className="me-2" />
           <span className="h5">Remove Product</span>
+        </div>
+
+        <div className="dashboardNav__option--remove pb-3" onClick={setShowOrders}>
+          <FontAwesomeIcon icon={faStore} className="me-2" />
+          <span className="h5">Orders</span>
         </div>
       </div>
     </div>
