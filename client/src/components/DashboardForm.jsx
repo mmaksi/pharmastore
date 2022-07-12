@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { Container, Form, Button, Modal } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import "./DashboardForm.scss";
 import ModalConfirm from "./ModalConfirm";
 import Title from "./Title";
 import axios from "axios";
+import { signInUser, signUpUser } from "../store/users/users.action";
+import { useNavigate } from "react-router-dom";
+
+const API_URL = `http://localhost:8000/v1`;
 
 const DashboardForm = ({
   title,
@@ -12,22 +17,31 @@ const DashboardForm = ({
   placeholders,
   types,
   names,
-  accepts
+  accepts,
+  formSubTitle,
 }) => {
   const [inputObject, setInputObject] = useState({});
   const [show, setShow] = useState(false);
+  const [userIsLoading, setUserIsLoading] = useState(false);
   const handleClose = () => setShow(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const changeHandler = (e) => {
     const inputName = e.target.name;
-    const inputValue = inputName === "imageUrl" ? URL.createObjectURL(e.target.files[0]) : e.target.value
+    const inputValue =
+      inputName === "imageUrl"
+        ? URL.createObjectURL(e.target.files[0])
+        : e.target.value;
     console.log({ ...inputObject, [inputName]: inputValue });
     setInputObject({ ...inputObject, [inputName]: inputValue });
   };
 
-  const { productName, category, imageUrl, price } = inputObject;
+  const { productName, category, imageUrl, price, username, email, password } =
+    inputObject;
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     switch (e.target.innerText) {
       case "Remove product":
@@ -36,7 +50,6 @@ const DashboardForm = ({
 
       case "Add product":
         setShow(false);
-        console.log({productName, category, imageUrl, price});
         axios
           .post("http://localhost:8000/v1/products", {
             productName,
@@ -50,6 +63,37 @@ const DashboardForm = ({
           .catch(function (error) {
             console.log(error);
           });
+        break;
+
+      case "Sign Up":
+        setUserIsLoading(true);
+        try {
+          const { data: user } = await axios.post(`${API_URL}/auth/signup`, {
+            username,
+            email,
+            password,
+          });
+          dispatch(signUpUser(user));
+          setUserIsLoading(false);
+          navigate(`/`);
+        } catch (error) {
+          console.log("err signup", error);
+        }
+        break;
+
+      case "Log in":
+        setUserIsLoading(true);
+        try {
+          const { data: user } = await axios.post(`${API_URL}/auth/signin`, {
+            username,
+            password,
+          });
+          dispatch(signInUser(user));
+          setUserIsLoading(false);
+          navigate(`/`);
+        } catch (error) {
+          console.log("err signin", error);
+        }
         break;
       default:
         break;
@@ -87,13 +131,15 @@ const DashboardForm = ({
             </Form.Group>
           ))}
 
+          {formSubTitle}
+
           <div className="d-grid gap-2">
             <Button
               variant="outline-dark"
               type={btnDetails.type}
               onClick={submitHandler}
             >
-              {btnDetails.title}
+              {userIsLoading ? "Please wait..." : btnDetails.title}
             </Button>
           </div>
         </Form>

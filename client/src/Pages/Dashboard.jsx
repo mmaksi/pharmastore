@@ -28,6 +28,7 @@ const Admin = () => {
           types={["text", "text", "text", "file"]}
           names={["productName", "category", "price", "imageUrl"]}
           accepts={[null, null, null, "image/*"]}
+          formSubTitle=""
         />
       )}
 

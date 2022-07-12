@@ -10,6 +10,7 @@ const CategoryItem = ({ title, img }) => {
   };
 
   return (
+    <>
     <Col>
       <Card className="categoryItem bg-dark text-white mb-3 m-2">
         <Card.Img src={img} alt={title} className="categoryItem__image" />
@@ -31,6 +32,7 @@ const CategoryItem = ({ title, img }) => {
         </Card.ImgOverlay>
       </Card>
     </Col>
+    </>
   );
 };
 

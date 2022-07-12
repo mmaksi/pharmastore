@@ -1,9 +1,19 @@
 import { Container, Row, } from "react-bootstrap";
 import CategoryItem from "../components/CategoriesCard";
+import { useSelector } from "react-redux";
+import { selectUser } from "../store/users/users.selector";
+import Title from "../components/Title";
 
 const CategoriesPage = () => {
+  const user = useSelector(selectUser)
+  console.log(user);
+
   return (
     <>
+    {/* {user.username && <h1 className="text-center mb-5">{`Welcome ${user.username}`}</h1>} */}
+    {user.username && <Title title={`Welcome ${user.username}`}></Title>}
+
+
       <Container>
         <Row>
           <CategoryItem img={`https://i.ibb.co/PTRVWVG/Hypertension.jpg`} title={`Hypertension`} />

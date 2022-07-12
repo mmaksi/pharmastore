@@ -11,7 +11,7 @@ const middleWares = [thunk].filter(Boolean);
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart"],
+  whitelist: ["cart", "users"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
