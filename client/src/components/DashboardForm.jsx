@@ -13,43 +13,65 @@ const API_URL = `http://localhost:8000/v1`;
 const DashboardForm = ({
   title,
   labels,
-  btnDetails,
   placeholders,
+  btnDetails,
   types,
   names,
   accepts,
   formSubTitle,
+  invalidInputMessages,
 }) => {
+  // Form states
+  const [validated, setValidated] = useState(false);
   const [inputObject, setInputObject] = useState({});
-  const [show, setShow] = useState(false);
   const [userIsLoading, setUserIsLoading] = useState(false);
+  const [buttonValid, setButtonValid] = useState(false);
+
+  const { productName, category, imageUrl, price, username, email, password } =
+    inputObject;
+
+  // Modal states
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
+  // Redux Dispatch
   const dispatch = useDispatch();
+  // React Router Navigate
   const navigate = useNavigate();
 
   const changeHandler = (e) => {
+    // Enables form validation error messages
+    setValidated(true);
+    const form = e.currentTarget;
+    form.checkValidity() ? setButtonValid(true) : setButtonValid(false);
+
     const inputName = e.target.name;
     const inputValue =
       inputName === "imageUrl"
         ? URL.createObjectURL(e.target.files[0])
         : e.target.value;
-    console.log({ ...inputObject, [inputName]: inputValue });
     setInputObject({ ...inputObject, [inputName]: inputValue });
-  };
+    console.log({ ...inputObject, [inputName]: inputValue });
 
-  const { productName, category, imageUrl, price, username, email, password } =
-    inputObject;
+    // if (inputName === "email") {
+    //   // axios.get()
+    // }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    switch (e.target.innerText) {
-      case "Remove product":
-        setShow(true);
-        break;
+    e.stopPropagation();
+    const form = e.currentTarget;
+    const buttonText = form.lastElementChild.lastElementChild.innerText
+    setButtonValid(false);
+    if (form.checkValidity() === false) {
+      setButtonValid(true);
+    }
 
+    switch (buttonText) {
       case "Add product":
         setShow(false);
+        console.log(productName, category, imageUrl, price);
         axios
           .post("http://localhost:8000/v1/products", {
             productName,
@@ -65,8 +87,13 @@ const DashboardForm = ({
           });
         break;
 
+      case "Remove product":
+        setShow(true);
+        break;
+
       case "Sign Up":
         setUserIsLoading(true);
+
         try {
           const { data: user } = await axios.post(`${API_URL}/auth/signup`, {
             username,
@@ -113,21 +140,30 @@ const DashboardForm = ({
       />
 
       {/* TITLE */}
-      <Title title={title} />
+      <Title title={title} width="40%" />
 
       {/* FORM */}
       <Container className="text-center mt-3 pb-4">
-        <Form className="dashboardBody__form">
+        <Form
+          noValidate
+          validated={validated}
+          className="dashboardBody__form"
+          onSubmit={submitHandler}
+        >
           {labels.map((label, index) => (
             <Form.Group key={label} className="mb-3">
               <Form.Label>{label}</Form.Label>
               <Form.Control
+                required
                 onChange={changeHandler}
                 type={types[index]}
                 placeholder={placeholders[index]}
                 name={names[index]}
                 accept={accepts[index]}
               />
+              <Form.Control.Feedback type="invalid">
+                {invalidInputMessages[index]}
+              </Form.Control.Feedback>
             </Form.Group>
           ))}
 
@@ -135,9 +171,9 @@ const DashboardForm = ({
 
           <div className="d-grid gap-2">
             <Button
+              disabled={buttonValid ? false : true}
               variant="outline-dark"
               type={btnDetails.type}
-              onClick={submitHandler}
             >
               {userIsLoading ? "Please wait..." : btnDetails.title}
             </Button>

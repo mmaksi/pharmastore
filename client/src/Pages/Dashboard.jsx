@@ -29,6 +29,12 @@ const Admin = () => {
           names={["productName", "category", "price", "imageUrl"]}
           accepts={[null, null, null, "image/*"]}
           formSubTitle=""
+          invalidInputMessages={[
+            "This field is required",
+            "This field is required",
+            "This field is required",
+            "This field is required",
+          ]}
         />
       )}
 

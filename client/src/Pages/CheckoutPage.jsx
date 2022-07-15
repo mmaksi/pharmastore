@@ -1,4 +1,4 @@
-import { Table, Container } from "react-bootstrap";
+import { Table, Container, Button } from "react-bootstrap";
 import "./ChecoutTable.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCartItems, selectCartTotal } from "../store/cart/cart.selector";
@@ -15,15 +15,15 @@ const Checkout = () => {
 
   const removeCartItemHandler = (_, cartItemToRemove) => {
     console.log(cartItemToRemove);
-    dispatch(clearItemFromCart(cartItems, cartItemToRemove))
-  }
+    dispatch(clearItemFromCart(cartItems, cartItemToRemove));
+  };
 
   return (
     <Container className="mt-4">
       <Table
-        variant="light"
         bordered={false}
-        borderless={false}
+        borderless={true}
+        striped={false}
         responsive="md"
       >
         <thead>
@@ -42,7 +42,9 @@ const Checkout = () => {
                 <td>{index + 1}</td>
                 <td>{item.productName}</td>
                 <td>{item.quantity}</td>
-                <td onClick={(event) => removeCartItemHandler(event, item)}><FontAwesomeIcon icon={faX} /></td>
+                <td onClick={(event) => removeCartItemHandler(event, item)}>
+                  <FontAwesomeIcon icon={faX} />
+                </td>
                 <td>${item.price}</td>
               </tr>
             );
@@ -50,7 +52,10 @@ const Checkout = () => {
           <tr className="table__totalRow">
             <td></td> <td></td> <td></td> <td></td>
             <td>
-              <strong>{`TOTAL PRICE: $${cartTotal}`}</strong>
+              <span className="mb-3" style={{ display: "block" }}><strong>{`TOTAL PRICE: $${cartTotal}`}</strong></span>
+              <Button variant="outline-dark">
+                SEND MY ORDER
+              </Button>
             </td>
           </tr>
         </tbody>

@@ -6,13 +6,32 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Cart from "../components/Cart";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCartCount } from "../store/cart/cart.selector";
+import { selectUserIsLoggedIn } from "../store/users/users.selector";
+import { clearUser, setUserIsLoggedIn } from "../store/users/users.action";
 
 const Navigation = () => {
+  const dispatch = useDispatch();
+
   const cartCount = useSelector(selectCartCount);
+  const userIsLoggedIn = useSelector(selectUserIsLoggedIn);
+
+  const logoutHandler = () => {
+    // dispatch(setUserIsLoggedIn(false))
+    dispatch(clearUser());
+    Navigate("/");
+  };
+
+  const runLogoutTimer = (dispatch, timer) => {
+    setTimeout(() => {
+      dispatch(clearUser());
+    }, timer);
+  };
+
+  if (userIsLoggedIn) runLogoutTimer(dispatch, 1000 * 60 * 60 * 24)
 
   return (
     <>
@@ -21,15 +40,25 @@ const Navigation = () => {
           <LinkContainer to="/">
             <Navbar.Brand>PHARMASTORE</Navbar.Brand>
           </LinkContainer>
-          
+
           <Nav className="ms-auto">
             <LinkContainer to="/register">
               <Nav.Link>Register</Nav.Link>
             </LinkContainer>
 
-            <LinkContainer to="/login">
-              <Nav.Link>Login</Nav.Link>
-            </LinkContainer>
+            {!userIsLoggedIn && (
+              <LinkContainer to="/login">
+                <Nav.Link>Login</Nav.Link>
+              </LinkContainer>
+            )}
+
+            {/* {`${userIsLoggedIn}` ? `Logout` : `Signin`} */}
+
+            {userIsLoggedIn && (
+              <LinkContainer to="/" onClick={logoutHandler}>
+                <Nav.Link>Logout</Nav.Link>
+              </LinkContainer>
+            )}
 
             <LinkContainer to="/dashboard">
               <Nav.Link>Dashboard</Nav.Link>

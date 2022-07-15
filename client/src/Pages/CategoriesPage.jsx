@@ -11,7 +11,7 @@ const CategoriesPage = () => {
   return (
     <>
     {/* {user.username && <h1 className="text-center mb-5">{`Welcome ${user.username}`}</h1>} */}
-    {user.username && <Title title={`Welcome ${user.username}`}></Title>}
+    {user.username && <h2 className="text-center mb-4">{`WELCOME ${user.username.toUpperCase()}`}</h2>}
 
 
       <Container>

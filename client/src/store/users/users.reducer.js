@@ -1,7 +1,8 @@
 import USERS_ACTION_TYPES from "./users.types";
 
 export const USERS_INITIAL_STATE = {
-  user: {}
+  user: {},
+  isLoggedIn: false
 };
 
 export const usersReducer = (
@@ -12,9 +13,13 @@ export const usersReducer = (
 
   switch (type) {
     case USERS_ACTION_TYPES.SIGN_UP_USER:
-      return { ...state, user: payload };
+      return { ...state, isLoggedIn: true, user: payload };
     case USERS_ACTION_TYPES.SIGN_IN_USER:
-      return { ...state, user: payload };
+      return { ...state, isLoggedIn: true, user: payload };
+    case USERS_ACTION_TYPES.SET_LOG_IN:
+      return { ...state, isLoggedIn: payload };
+    case USERS_ACTION_TYPES.CLEAR_USER:
+      return { ...state, isLoggedIn: false, user: payload };
     default:
       return state;
   }

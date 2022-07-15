@@ -8,3 +8,10 @@ export const selectUser = createSelector(
     return usersReducerSlice.user;
   }
 );
+
+export const selectUserIsLoggedIn = createSelector(
+  [selectUsersReducer],
+  (usersReducerSlice) => {
+    return usersReducerSlice.isLoggedIn;
+  }
+);

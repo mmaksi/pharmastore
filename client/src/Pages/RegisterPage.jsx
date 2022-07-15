@@ -14,6 +14,7 @@ const Register = () => {
       names={["username", "email", "password"]}
       accepts={[null, null, null]}
       formSubTitle={registerSubTitle}
+      invalidInputMessages={["Required field", "Invalid email", "Required field"]}
     />
   );
 };
