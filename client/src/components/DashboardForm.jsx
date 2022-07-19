@@ -7,6 +7,7 @@ import Title from "./Title";
 import axios from "axios";
 import { signInUser, signUpUser } from "../store/users/users.action";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const API_URL = `http://localhost:8000/v1`;
 
@@ -16,6 +17,7 @@ const DashboardForm = ({
   placeholders,
   btnDetails,
   types,
+  mins,
   names,
   accepts,
   formSubTitle,
@@ -26,65 +28,91 @@ const DashboardForm = ({
   const [inputObject, setInputObject] = useState({});
   const [userIsLoading, setUserIsLoading] = useState(false);
   const [buttonValid, setButtonValid] = useState(false);
+  const [buttonTitle, setButtonTitle] = useState(btnDetails.title);
 
   const { productName, category, imageUrl, price, username, email, password } =
     inputObject;
 
   // Modal states
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-
-  // Redux Dispatch
   const dispatch = useDispatch();
-  // React Router Navigate
   const navigate = useNavigate();
 
-  const changeHandler = (e) => {
-    // Enables form validation error messages
-    setValidated(true);
-    const form = e.currentTarget;
-    form.checkValidity() ? setButtonValid(true) : setButtonValid(false);
+  // Event Hadlers
+  const handleClose = () => setShow(false);
 
-    const inputName = e.target.name;
-    const inputValue =
-      inputName === "imageUrl"
-        ? URL.createObjectURL(e.target.files[0])
-        : e.target.value;
-    setInputObject({ ...inputObject, [inputName]: inputValue });
-    console.log({ ...inputObject, [inputName]: inputValue });
+  /* CHANGE HANDLER */
+  const changeHandler = (event) => {
+    const inputField = event.currentTarget.parentNode.parentNode.lastElementChild.lastElementChild;
+    const buttonText = inputField.innerText;
+    const inputName = event.target.name;
+    let inputValue = event.target.value
 
-    // if (inputName === "email") {
-    //   // axios.get()
-    // }
+    switch (buttonText) {
+      case "Add product":
+        switch (inputName) {
+          case "imageUrl":
+            inputValue = URL.createObjectURL(event.target.files[0])
+              .slice(5)
+              .toString();
+            break;
+          case "price":
+            inputValue = event.target.valueAsNumber
+            break
+          default:
+            inputValue = event.target.value;
+            break;
+        }
+        setInputObject({ ...inputObject, [inputName]: inputValue });
+    
+        const isImageUrl = !!(inputValue.slice(0, 4) === "http");
+        // const isNumber = Number(inputValue)
+        // const isPositiveNumber = Number(isNumber) > 0
+    
+        if (inputField.checkValidity() && isImageUrl) {
+          setButtonValid(true);
+        } else {
+          setButtonValid(false);
+        }
+    
+        // Check email from DB
+        break;
+        case "Remove product":
+          setInputObject({ ...inputObject, [inputName]: inputValue });
+
+          if (inputField.checkValidity()) {
+            setButtonValid(true);
+          } else {
+            setButtonValid(false);
+          }
+          break;
+      default:
+        break;
+    }
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const form = e.currentTarget;
-    const buttonText = form.lastElementChild.lastElementChild.innerText
-    setButtonValid(false);
-    if (form.checkValidity() === false) {
-      setButtonValid(true);
+  /* SUBMIT HANDLER */
+  const submitHandler = async (event) => {
+    const form = event.currentTarget;
+    const buttonText = form.lastElementChild.lastElementChild.innerText;
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (form.checkValidity()) {
+      setValidated(true);
+      setInputObject({});
+    } else {
+      setValidated(false);
     }
 
     switch (buttonText) {
       case "Add product":
         setShow(false);
-        console.log(productName, category, imageUrl, price);
-        axios
-          .post("http://localhost:8000/v1/products", {
-            productName,
-            category,
-            imageUrl,
-            price,
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        try {
+          await axios.post("http://localhost:8000/v1/products", inputObject);
+        } catch (error) {
+          console.error(error);
+        }
         break;
 
       case "Remove product":
@@ -129,7 +157,6 @@ const DashboardForm = ({
 
   return (
     <>
-      {/* MODAL */}
       <ModalConfirm
         show={show}
         handleClose={handleClose}
@@ -138,11 +165,8 @@ const DashboardForm = ({
         of your action?"
         action="DELETE"
       />
-
-      {/* TITLE */}
       <Title title={title} width="40%" />
 
-      {/* FORM */}
       <Container className="text-center mt-3 pb-4">
         <Form
           noValidate
@@ -151,12 +175,13 @@ const DashboardForm = ({
           onSubmit={submitHandler}
         >
           {labels.map((label, index) => (
-            <Form.Group key={label} className="mb-3">
+            <Form.Group key={label} className="mb-3" hasValidation>
               <Form.Label>{label}</Form.Label>
               <Form.Control
                 required
                 onChange={changeHandler}
                 type={types[index]}
+                min={mins[index]}
                 placeholder={placeholders[index]}
                 name={names[index]}
                 accept={accepts[index]}
@@ -175,7 +200,7 @@ const DashboardForm = ({
               variant="outline-dark"
               type={btnDetails.type}
             >
-              {userIsLoading ? "Please wait..." : btnDetails.title}
+              {buttonTitle}
             </Button>
           </div>
         </Form>

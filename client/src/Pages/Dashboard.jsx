@@ -1,7 +1,9 @@
 import { useState } from "react";
+import AddProductForm from "../components/AddProductForm";
 import DashboardForm from "../components/DashboardForm";
 import DashboardNav from "../components/DashboardNav";
 import Orders from "../components/Orders";
+import RemoveProductForm from "../components/RemoveProductForm";
 
 const Admin = () => {
   const [sideNavOptions, setSideNavOptions] = useState({
@@ -15,31 +17,14 @@ const Admin = () => {
       <DashboardNav setSideNavOptions={setSideNavOptions} />
 
       {sideNavOptions.addProduct && (
-        <DashboardForm
+        <AddProductForm
           title="Add a new product"
-          labels={["Product Name", "Product Category", "Product Price", "Product Image"]}
-          placeholders={[
-            "Product Name",
-            "Product's Category",
-            "Product's Price",
-            "Upload an image for the product",
-          ]}
           btnDetails={{ title: "Add product", type: "submit" }}
-          types={["text", "text", "text", "file"]}
-          names={["productName", "category", "price", "imageUrl"]}
-          accepts={[null, null, null, "image/*"]}
-          formSubTitle=""
-          invalidInputMessages={[
-            "This field is required",
-            "This field is required",
-            "This field is required",
-            "This field is required",
-          ]}
         />
       )}
 
       {sideNavOptions.removeProduct && (
-        <DashboardForm
+        <RemoveProductForm
           title="Remove a product"
           labels={["Product Name"]}
           placeholders={[
@@ -48,6 +33,12 @@ const Admin = () => {
           btnDetails={{ title: "Remove product", type: "submit" }}
           types={["text"]}
           names={["productName"]}
+          mins={[undefined]}
+          accepts={[null]}
+          formSubTitle=""
+          invalidInputMessages={[
+            "This field is required"
+          ]}
         />
       )}
 

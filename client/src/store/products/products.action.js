@@ -2,12 +2,26 @@ import axios from "axios";
 import PRODUCTS_ACTION_TYPES from "./products.types";
 import createAction from "../../utils/reducer.utils";
 
-const fetchProductsStartAsync = (categoryName) => async (dispatch) => {
+export const fetchCategoryProductsStartAsync = (categoryName) => async (dispatch) => {
   // dispatch startAction
   dispatch(fetchProductsStart());
   try {
     // dispatch success action
     const response = await axios.get(`http://localhost:8000/v1/products/${categoryName}`);
+    const products = await response.data;
+    dispatch(fetchProductsSuccess(products));
+  } catch (error) {
+    // dispatch failure action
+    dispatch(fetchProductsFailure(error.message));
+  }
+};
+
+export const fetchProductsStartAsync = () => async (dispatch) => {
+  // dispatch startAction
+  dispatch(fetchProductsStart());
+  try {
+    // dispatch success action
+    const response = await axios.get(`http://localhost:8000/v1/products`);
     const products = await response.data;
     dispatch(fetchProductsSuccess(products));
   } catch (error) {
@@ -28,5 +42,3 @@ const fetchProductsSuccess = (products) =>
 const fetchProductsFailure = (error) => {
   createAction(PRODUCTS_ACTION_TYPES.FETCH_PRODUCTS_FAILED, error);
 };
-
-export default fetchProductsStartAsync;

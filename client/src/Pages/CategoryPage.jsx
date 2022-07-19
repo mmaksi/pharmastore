@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import fetchProductsStartAsync from "../store/products/products.action";
+import { fetchCategoryProductsStartAsync } from "../store/products/products.action";
 import { selectProducts } from "../store/products/products.selector";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -26,7 +26,7 @@ const Category = () => {
   const cartItems = useSelector(selectCartItems);
 
   useEffect(() => {
-    dispatch(fetchProductsStartAsync(categoryName));
+    dispatch(fetchCategoryProductsStartAsync(categoryName));
   }, [dispatch, categoryName]);
 
   const categoryProducts = useSelector(selectProducts);
