@@ -13,13 +13,26 @@ const getAllUsers = async () => {
 };
 
 const getAuthenticatedUser = async (user) => {
+  // Find admin
+  const foundAdmin = await findAdminUser(user);
+  // Find basic user
   const foundUser = await findUser(user);
+  console.log("foundAdmin", foundAdmin);
+  console.log("foundAdmin", !!foundAdmin);
+  console.log("foundUser", foundUser);
+  console.log("foundUser", !!foundUser);
+
   try {
     const isPassVerified = await bcrypt.compare(
       user.password,
       foundUser.password
     );
-    if (isPassVerified) return foundUser;
+
+    if (foundAdmin && isPassVerified) {
+      return foundAdmin;
+    } else if (foundUser && isPassVerified) {
+      return foundUser;
+    }
     return { error: `Wrong password` };
   } catch (error) {
     return error;
@@ -41,7 +54,7 @@ const addUser = async (userToAdd) => {
   }
 };
 
-// Implementation detail
+// Implementation details
 const findUser = async (user) => {
   try {
     const foundUsers = await usersModel.find(
@@ -50,6 +63,20 @@ const findUser = async (user) => {
     );
     const foundUser = foundUsers[0];
     return foundUser;
+  } catch (error) {
+    console.error("auth model", error);
+    return error;
+  }
+};
+
+const findAdminUser = async (user) => {
+  try {
+    const userAdmins = await usersModel.find(
+      { username: user.username, isAdmin: true },
+      { __v: 0, _id: 0 }
+    );
+    const foundAdmin = userAdmins[0];
+    return foundAdmin;
   } catch (error) {
     console.error("auth model", error);
     return error;

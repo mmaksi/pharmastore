@@ -3,6 +3,7 @@ const {
   getAllProducts,
   getCategoryProducts,
   addProduct,
+  deleteProduct,
 } = require("../../models/products.model");
 
 const httpGetAllProducts = async (req, res) => {
@@ -35,8 +36,16 @@ const httpAddProduct = async (req, res) => {
   }
 };
 
+const httpDeleteProduct = async (req, res) => {
+  const product = req.body
+  if (!product.productName) res.status(400).json({ error: "missing required properties" });
+  await deleteProduct(product)
+  // res.status(200).json(deletedProduct);
+}
+
 module.exports = {
   httpGetAllProducts,
   httpGetCategoryProducts,
   httpAddProduct,
+  httpDeleteProduct
 };

@@ -18,4 +18,10 @@ const addProduct = async (product) => {
   );
 };
 
-module.exports = { getAllProducts, getCategoryProducts, addProduct };
+const deleteProduct = async (product) => {
+  const foundDeletedProduct = await productsModel.findOne({ name: product.productName });
+  console.log(foundDeletedProduct)
+  // if (foundDeletedProduct) await productsModel.deleteOne({ name: product.productName });
+}
+
+module.exports = { getAllProducts, getCategoryProducts, addProduct, deleteProduct };

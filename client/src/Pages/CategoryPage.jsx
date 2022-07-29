@@ -7,6 +7,7 @@ import {
   ListGroup,
   Button,
   Form,
+  Alert,
 } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,8 +22,11 @@ import { useState } from "react";
 
 const Category = () => {
   const [quantity, setQuantity] = useState(1)
-  const { categoryName } = useParams(); // use it to query the database
+  const [showAlert, setShowAlert] = useState(false)
+
   const dispatch = useDispatch();
+  const { categoryName } = useParams(); // use it to query the database
+
   const cartItems = useSelector(selectCartItems);
 
   useEffect(() => {
@@ -34,6 +38,10 @@ const Category = () => {
   const addToCartHandler = (_, selectedProduct) => {
     const productToAdd = {...selectedProduct , quantity}
     dispatch(addItemToCart(cartItems, productToAdd));
+    setShowAlert(true)
+    setTimeout(() => {
+      setShowAlert(false)
+    }, 1000);
     setQuantity(1);
   };
 
@@ -56,6 +64,13 @@ const Category = () => {
         <Link className="btn btn-light my-3" to="/">
           <FontAwesomeIcon icon={faChevronLeft} /> Go Back
         </Link>
+
+        {showAlert && (
+          <Alert className="alert" variant="info">
+          {`Added to cart!`}
+        </Alert>
+
+        )}
         <Row xs={1} md={4} className="g-4">
           {categoryProducts.map((product, idx) => (
             <Col className="mb-4" key={product.productId}>

@@ -13,6 +13,10 @@ export const setUserIsLoggedIn = (boolean) => {
   return createAction(USERS_ACTION_TYPES.SET_LOG_IN, boolean)
 }
 
+export const setAdmin = (boolean) => {
+  return createAction(USERS_ACTION_TYPES.SET_ADMIN, boolean)
+}
+
 export const clearUser = () => {
   return createAction(USERS_ACTION_TYPES.CLEAR_USER, {})
 }

@@ -15,3 +15,10 @@ export const selectUserIsLoggedIn = createSelector(
     return usersReducerSlice.isLoggedIn;
   }
 );
+
+export const selectIsAdmin = createSelector(
+  [selectUsersReducer],
+  (usersReducerSlice) => {
+    return usersReducerSlice.isAdmin;
+  }
+);

@@ -4,22 +4,30 @@
   }
 
   &__image {
-    opacity: 0.5
+    opacity: 0.5;
+    display: block;
+    width: 100%;
   }
 
   &__title {
-    display: block
+    display: block;
   }
 
   &__imgOverlay {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 200px; 
+    height: 200px;
   }
 
   &__button {
     position: absolute;
-    margin-top: 6rem;
+    transform: translate(-50%, -50%);
+    margin-right: -50%;
+    top: 50%;
+    left: 50%;
+    display: block;
+    margin: auto;
+    text-align: center;
   }
 }
