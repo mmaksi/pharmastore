@@ -3,6 +3,7 @@ import { Container, Form, Button, Spinner, Alert } from "react-bootstrap";
 import Title from "../components/Title";
 import axios from "axios";
 import "./AddProduct.scss";
+import API_URL from "../utils/API_URL";
 
 const initialInputFields = {
   productName: "",
@@ -42,7 +43,7 @@ const AddProductForm = () => {
       setValidated(false);
       setButtonValid(false);
       try {
-        await axios.post("http://localhost:8000/v1/products", inputObject);
+        await axios.post(`${API_URL}/products`, inputObject);
         setShowAlert(true);
         setTimeout(() => {
           setShowAlert(false);

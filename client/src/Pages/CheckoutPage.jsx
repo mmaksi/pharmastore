@@ -9,6 +9,7 @@ import { clearItemFromCart } from "../store/cart/cart.action";
 import { selectUser } from "../store/users/users.selector";
 import axios from "axios";
 import { useState } from "react";
+import API_URL from "../utils/API_URL";
 
 const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -29,7 +30,7 @@ const Checkout = () => {
     const orderItems = cartItems;
     const totalPrice = cartTotal;
     try {
-      const { data } = await axios.post(`http://localhost:8000/v1/orders`, {
+      const { data } = await axios.post(`${API_URL}/orders`, {
         orderItems,
         totalPrice,
         user

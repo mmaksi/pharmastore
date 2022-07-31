@@ -1,13 +1,14 @@
 import axios from "axios";
 import PRODUCTS_ACTION_TYPES from "./products.types";
 import createAction from "../../utils/reducer.utils";
+import API_URL from "../../utils/API_URL";
 
 export const fetchCategoryProductsStartAsync = (categoryName) => async (dispatch) => {
   // dispatch startAction
   dispatch(fetchProductsStart());
   try {
     // dispatch success action
-    const response = await axios.get(`http://localhost:8000/v1/products/${categoryName}`);
+    const response = await axios.get(`${API_URL}/products/${categoryName}`);
     const products = await response.data;
     dispatch(fetchProductsSuccess(products));
   } catch (error) {
@@ -21,7 +22,7 @@ export const fetchProductsStartAsync = () => async (dispatch) => {
   dispatch(fetchProductsStart());
   try {
     // dispatch success action
-    const response = await axios.get(`http://localhost:8000/v1/products`);
+    const response = await axios.get(`${API_URL}/products`);
     const products = await response.data;
     dispatch(fetchProductsSuccess(products));
   } catch (error) {

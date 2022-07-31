@@ -6,6 +6,7 @@ import axios from "axios";
 
 import { setAdmin, signInUser } from "../store/users/users.action";
 import Title from "../components/Title";
+import API_URL from "../utils/API_URL";
 
 const loginSubTitle = (
   <p className="text-center">
@@ -16,7 +17,7 @@ const loginSubTitle = (
   </p>
 );
 
-const API_URL = `http://localhost:8000/v1`;
+const API_URL = `${API_URL}`;
 
 const initialInputFields = {
   username: "",

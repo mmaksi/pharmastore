@@ -6,8 +6,9 @@ import ModalConfirm from "../components/ModalConfirm";
 import Title from "../components/Title";
 import { signUpUser } from "../store/users/users.action";
 import axios from "axios";
+import API_URL from "../utils/API_URL";
 
-const API_URL = `http://localhost:8000/v1`;
+const API_URL = `${API_URL}`;
 const initialInputFields = { username: "", email: "", password: "" };
 
 const Register = () => {

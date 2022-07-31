@@ -7,7 +7,7 @@ const fetchOrdersStartAsync = () => async (dispatch) => {
   dispatch(fetchOrdersStart());
   try {
     // dispatch success action
-    const { data: orders } = await axios.get(`http://localhost:8000/v1/orders`);
+    const { data: orders } = await axios.get(`${API_URL}/orders`);
     dispatch(fetchOrdersSuccess(orders));
   } catch (error) {
     // dispatch failure action

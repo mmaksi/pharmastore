@@ -7,6 +7,7 @@ import ModalConfirm from "../components/ModalConfirm";
 import Title from "../components/Title";
 import axios from "axios";
 import "./DashboardForm.scss"
+import API_URL from "../utils/API_URL";
 
 
 const initialInputFields = {
@@ -58,7 +59,7 @@ const RemoveProductForm = () => {
       setValidated(false);
       setButtonValid(false);
       try {
-        await axios.post("http://localhost:8000/v1/products", inputObject);
+        await axios.post(`${API_URL}/products`, inputObject);
         setShowAlert(true);
         setTimeout(() => {
           setShowAlert(false);
