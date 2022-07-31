@@ -9,6 +9,7 @@ import AddProduct from "./Pages/AddProduct";
 import RemoveProduct from "./Pages/RemoveProduct";
 import { selectIsAdmin, selectUser, selectUserIsLoggedIn } from "./store/users/users.selector";
 import { useSelector } from "react-redux";
+import Orders from "./components/Orders";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
           <Route path="checkout" element={<Checkout />} />
           <Route path="addProduct" element={<AddProduct />} />
           <Route path="removeProduct" element={<RemoveProduct />} />
+          <Route path="orders" element={<Orders />} />
         </Route>
       </Routes>
     </>

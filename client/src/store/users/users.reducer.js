@@ -29,3 +29,41 @@ export const usersReducer = (state = USERS_INITIAL_STATE, action = {}) => {
       return state;
   }
 };
+
+
+
+
+
+
+
+const arr = [
+  {
+    user: {
+      username: "john"
+    },
+    orderItems: ["phone", "laptop"]
+  },
+  {
+    user: {
+      username: "john"
+    },
+    orderItems: ["monitor"]
+  },
+  {
+    user: {
+      username: "paul"
+    },
+    orderItems: ["board"]
+  },
+]
+
+
+
+
+
+
+
+
+
+
+

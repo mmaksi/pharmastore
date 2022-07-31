@@ -76,7 +76,7 @@ const Checkout = () => {
             <td></td> <td></td> <td></td> <td></td>
             <td>
               <span className="mb-3" style={{ display: "block" }}><strong>{`TOTAL PRICE: $${cartTotal}`}</strong></span>
-              <Button disabled={ isLoading ? true : false } variant="outline-dark" onClick={(event) => sendOrderHandler(event, cartItems)}>
+              <Button disabled={ isLoading || !cartItems.length ? true : false } variant="outline-dark" onClick={(event) => sendOrderHandler(event, cartItems)}>
                 {isLoading ? "Sending order..." : "SEND MY ORDER"}
               </Button>
             </td>

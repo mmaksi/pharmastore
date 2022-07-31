@@ -121,7 +121,7 @@ const Navigation = () => {
                 </LinkContainer>}
 
                 {/* Offcanvas body - Orders */}
-                {isAdmin && <LinkContainer to="/checkout">
+                {isAdmin && <LinkContainer to="/orders">
                   <Nav.Link>
                     <FontAwesomeIcon icon={faStore} className="me-2" />
                     Orders
