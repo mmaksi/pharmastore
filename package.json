@@ -1,7 +1,7 @@
 {
-  "name": "tech-pharm",
+  "name": "pharmastore",
   "version": "1.0.0",
-  "description": "des",
+  "description": "online software solution to order medicine for pharmacies online",
   "engines": {
     "node": "16.16.0"
   },
@@ -10,7 +10,7 @@
     "install-server": "cd server && npm install",
     "install-client": "cd client && npm install",
     "install": "npm run install-server && npm run install-client",
-    "server": "npm run watch --prefix server",
+    "server": "cd server && npm run watch",
     "client": "npm start --prefix client",
     "watch": "npm run server & npm run client",
     "deploy": "npm run build --prefix client && npm run server"

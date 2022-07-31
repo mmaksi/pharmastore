@@ -7,19 +7,30 @@ import Navigation from "./Pages/Navigation";
 import Register from "./Pages/RegisterPage";
 import AddProduct from "./Pages/AddProduct";
 import RemoveProduct from "./Pages/RemoveProduct";
-import { selectUser, selectUserIsLoggedIn } from "./store/users/users.selector";
+import { selectIsAdmin, selectUser, selectUserIsLoggedIn } from "./store/users/users.selector";
 import { useSelector } from "react-redux";
 
 
 function App() {
   const user = useSelector(selectUser)
   const isLoggedIn = useSelector(selectUserIsLoggedIn)
+  const isAdmin = useSelector(selectIsAdmin)
+
+  let homeRoute = <CategoriesPage />
+
+  if (isAdmin && isLoggedIn) {
+    homeRoute = <AddProduct />
+  } else if (!isAdmin && isLoggedIn) {
+    homeRoute = <CategoriesPage />
+  } else if (!isAdmin && !isLoggedIn) {
+    homeRoute = <Login />
+  }
   
   return (
     <>
       <Routes>
         <Route path="/" element={<Navigation />}>
-          <Route index element={isLoggedIn? <CategoriesPage /> : <Login />} />
+          <Route index element={homeRoute} />
           <Route path="categories" element={<CategoriesPage />}></Route>
           <Route path="/:categoryName" element={<Category />} />
           <Route path="register" element={<Register />} />

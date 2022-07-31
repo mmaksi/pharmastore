@@ -4,16 +4,6 @@ import Title from "../components/Title";
 import axios from "axios";
 import "./AddProduct.scss";
 
-import {
-  selectIsAdmin,
-  selectUser,
-  selectUserIsLoggedIn,
-} from "../store/users/users.selector";
-import { useDispatch, useSelector } from "react-redux";
-import AuthErr from "../components/AuthErr";
-
-const API_URL = `http://localhost:8000/v1`;
-
 const initialInputFields = {
   productName: "",
   category: "",
@@ -29,10 +19,6 @@ const AddProductForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
-
-  const isLoggedIn = useSelector(selectUserIsLoggedIn);
-  const isAdmin = useSelector(selectIsAdmin);
-  const user = useSelector(selectUser);
 
   /* CHANGE HANDLER */
   const changeHandler = (event) => {
@@ -81,7 +67,7 @@ const AddProductForm = () => {
       {(showAlert || showErrorAlert) && (
         <Alert
           className="alert"
-          variant={showErrorAlert ? "danger" : "success"}
+          variant={showErrorAlert ? "danger" : "info"}
         >
           {showErrorAlert ? `Error adding product!` : `Product added!`}
         </Alert>

@@ -1,21 +1,23 @@
 import { useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ModalConfirm from "../components/ModalConfirm";
 import Title from "../components/Title";
 import { signUpUser } from "../store/users/users.action";
 import axios from "axios";
 
 const API_URL = `http://localhost:8000/v1`;
-
+const initialInputFields = { username: "", email: "", password: "" };
 
 const Register = () => {
   // Form states
   const [validated, setValidated] = useState(false);
-  const [inputObject, setInputObject] = useState({});
-  const [userIsLoading, setUserIsLoading] = useState(false);
-  const [buttonValid, setButtonValid] = useState(false);
+  const [inputObject, setInputObject] = useState(initialInputFields);
+  const [isLoading, setIsLoading] = useState(false);
+  const [buttonValid, setButtonValid] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   const { username, email, password } = inputObject;
 
@@ -23,11 +25,12 @@ const Register = () => {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = useParams();
+  console.log("params", params);
 
-  // Event Hadlers
+  /* EVENT HANDLERS */
   const handleClose = () => setShow(false);
 
-  /* CHANGE HANDLER */
   const changeHandler = (event) => {
     const inputName = event.target.name;
     const inputValue = event.target.value;
@@ -36,26 +39,36 @@ const Register = () => {
 
   /* SUBMIT HANDLER */
   const submitHandler = async (event) => {
+    const form = event.currentTarget;
     event.preventDefault();
     event.stopPropagation();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      setValidated(true);
-    } else {
+    setValidated(true);
+
+    if (form.checkValidity()) {
+      setIsLoading(true);
       setValidated(false);
-      setUserIsLoading(true);
+      setButtonValid(false);
       try {
         const { data: user } = await axios.post(`${API_URL}/auth/signup`, {
           username,
           email,
           password,
         });
-        console.log(user);
-        dispatch(signUpUser(user));
-        setUserIsLoading(false);
-        navigate(`/`);
+        if (user.username) {
+          dispatch(signUpUser(user));
+          setTimeout(() => {
+            navigate(`/`);
+          }, 2500);
+        }
       } catch (error) {
-        console.log("err signup", error);
+        setInputObject(initialInputFields);
+        setIsLoading(false);
+        setButtonValid(false);
+        setShowErrorAlert(true);
+        setTimeout(() => {
+          setButtonValid(true);
+          setShowErrorAlert(false);
+        }, 2500);
       }
     }
   };
@@ -71,6 +84,17 @@ const Register = () => {
 
   return (
     <>
+      {(showAlert || showErrorAlert) && (
+        <Alert
+          className="alert"
+          variant={showErrorAlert ? "danger" : "success"}
+        >
+          {showErrorAlert
+            ? `Something went wrong! Please try again.`
+            : `Welcome!`}
+        </Alert>
+      )}
+
       <ModalConfirm
         show={show}
         handleClose={handleClose}
@@ -104,7 +128,7 @@ const Register = () => {
           </Form.Group>
 
           {/* Email */}
-          <Form.Group className="mb-3" >
+          <Form.Group className="mb-3">
             <Form.Label>E-mail</Form.Label>
             <Form.Control
               required
@@ -119,7 +143,7 @@ const Register = () => {
           </Form.Group>
 
           {/* Password */}
-          <Form.Group className="mb-3" >
+          <Form.Group className="mb-3">
             <Form.Label>Password</Form.Label>
             <Form.Control
               required
@@ -141,7 +165,7 @@ const Register = () => {
               variant="outline-dark"
               type="submit"
             >
-              {userIsLoading ? "Please wait..." : "Sign up"}
+              {isLoading ? "Please wait..." : "Sign up"}
             </Button>
           </div>
         </Form>

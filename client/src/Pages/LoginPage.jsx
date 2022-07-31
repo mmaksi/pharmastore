@@ -1,4 +1,4 @@
-import { Button, Form, Container } from "react-bootstrap";
+import { Button, Form, Container, Alert, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -18,19 +18,21 @@ const loginSubTitle = (
 
 const API_URL = `http://localhost:8000/v1`;
 
-const initialState = {
+const initialInputFields = {
   username: "",
-  password: ""
-}
+  password: "",
+};
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [validated, setValidated] = useState(false);
-  const [inputObject, setInputObject] = useState(initialState);
-  const [userIsLoading, setUserIsLoading] = useState(false);
+  const [inputObject, setInputObject] = useState(initialInputFields);
+  const [isLoading, setIsLoading] = useState(false);
   const [buttonValid, setButtonValid] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   const { username, password } = inputObject;
 
@@ -43,36 +45,58 @@ const Register = () => {
 
   /* SUBMIT HANDLER */
   const submitHandler = async (event) => {
+    const form = event.currentTarget;
     event.preventDefault();
     event.stopPropagation();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      setValidated(true);
-    } else {
+    setValidated(true);
+
+    if (form.checkValidity()) {
+      setIsLoading(true);
       setValidated(false);
-      setUserIsLoading(true);
+      setButtonValid(false);
       try {
         const { data: user } = await axios.post(`${API_URL}/auth/signin`, {
           username,
           password,
         });
         if (user.username) {
-          setUserIsLoading(false);
           dispatch(signInUser(user));
           if (user.isAdmin) dispatch(setAdmin(true));
           navigate(`/`);
         } else {
-          alert(`Wrong username or password`);
+          setInputObject(initialInputFields);
+          setIsLoading(false);
+          setButtonValid(false);
+          setShowErrorAlert(true);
+          setTimeout(() => {
+            setButtonValid(true);
+            setShowErrorAlert(false);
+          }, 2500);
         }
       } catch (error) {
-        setUserIsLoading(false);
-        console.log("err signin", error);
+        setInputObject(initialInputFields);
+        setIsLoading(false);
+        setButtonValid(false);
+        setShowErrorAlert(true);
+        setTimeout(() => {
+          setButtonValid(true);
+          setShowErrorAlert(false);
+        }, 2500);
       }
     }
   };
 
   return (
     <>
+      {(showAlert || showErrorAlert) && (
+        <Alert
+          className="alert"
+          variant={showErrorAlert ? "danger" : "info"}
+        >
+          {showErrorAlert ? `Wrong username or password!` : `Welcome!`}
+        </Alert>
+      )}
+
       <Title title="Log in" width="40%" />
 
       <Container className="text-center mt-3 pb-4">
@@ -90,12 +114,13 @@ const Register = () => {
               type="text"
               placeholder="Username"
               name="username"
+              value={inputObject.username}
             />
             <Form.Control.Feedback type="invalid">
               Invalid username.
             </Form.Control.Feedback>
           </Form.Group>
-          
+
           <Form.Group className="mb-3">
             <Form.Label>Password</Form.Label>
             <Form.Control
@@ -104,6 +129,7 @@ const Register = () => {
               type="password"
               placeholder="Password"
               name="password"
+              value={inputObject.password}
             />
             <Form.Control.Feedback type="invalid">
               Invalid password.
@@ -118,7 +144,17 @@ const Register = () => {
               variant="outline-dark"
               type="submit"
             >
-              {userIsLoading ? "Please wait..." : "Login"}
+              {isLoading && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+              )}
+              {isLoading ? "Please wait..." : "Login"}
             </Button>
           </div>
         </Form>

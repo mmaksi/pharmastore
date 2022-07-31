@@ -1,4 +1,5 @@
 const ordersModel = require("./orders.mongo");
+const { v4: uuidv4 } = require('uuid');
 
 const getOrders = async () => {
   const orders = await ordersModel.find({}, { __v: 0, _id: 0 }).populate([
@@ -17,8 +18,10 @@ const getOrderById = async (orderId) => {
 };
 
 const addOrder = async (orderToAdd) => {
+  const orderId = uuidv4()
+  orderToAdd = { ...orderToAdd, orderId }
   console.log(orderToAdd);
-  await ordersModel.findOneAndUpdate({ name: orderToAdd.name }, orderToAdd, {
+  await ordersModel.findOneAndUpdate({ orderId: orderToAdd.orderId }, orderToAdd, {
     upsert: true,
   });
 };

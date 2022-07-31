@@ -48,7 +48,7 @@ const Navigation = () => {
       <Navbar
         className="p-3 mb-3"
         bg="dark"
-        expand="flase"
+        expand={isAdmin ? false : "lg"}
         variant="dark"
         sticky="top"
       >
@@ -93,38 +93,40 @@ const Navigation = () => {
                   </LinkContainer>
                 )}
 
-                {/* Offcanvas body - checkout */}
-                <LinkContainer to={isLoggedIn ? `/checkout` : `/login`}>
-                  <Nav.Link>
-                    <Cart count={cartCount} />
-                  </Nav.Link>
-                </LinkContainer>
+                {/* Offcanvas body - Cart */}
+                {!isAdmin && (
+                  isLoggedIn && <LinkContainer to={isLoggedIn ? `/checkout` : `/login`}>
+                    <Nav.Link>
+                      <Cart count={cartCount} />
+                    </Nav.Link>
+                  </LinkContainer>
+                )}
 
-                <NavDropdown.Divider />
+                {isLoggedIn && <NavDropdown.Divider />}
 
                 {/* Offcanvas body - Add Product */}
-                <LinkContainer to={`/addProduct`}>
+                {isAdmin && <LinkContainer to={`/addProduct`}>
                   <Nav.Link>
                     <FontAwesomeIcon icon={faCirclePlus} className="me-2" />
                     Add Product
                   </Nav.Link>
-                </LinkContainer>
+                </LinkContainer>}
 
                 {/* Offcanvas body - Remove Product */}
-                <LinkContainer to={`/removeProduct`}>
+                {isAdmin && <LinkContainer to={`/removeProduct`}>
                   <Nav.Link>
                     <FontAwesomeIcon icon={faCircleMinus} className="me-2" />
                     Remove Product
                   </Nav.Link>
-                </LinkContainer>
+                </LinkContainer>}
 
                 {/* Offcanvas body - Orders */}
-                <LinkContainer to="/checkout">
+                {isAdmin && <LinkContainer to="/checkout">
                   <Nav.Link>
                     <FontAwesomeIcon icon={faStore} className="me-2" />
                     Orders
                   </Nav.Link>
-                </LinkContainer>
+                </LinkContainer>}
               </Nav>
             </Offcanvas.Body>
           </Navbar.Offcanvas>
