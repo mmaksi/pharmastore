@@ -88,7 +88,7 @@ const Navigation = () => {
 
                 {/* Offcanvas body - Logout */}
                 {isLoggedIn && (
-                  <LinkContainer to="/" onClick={logoutHandler}>
+                  <LinkContainer to="login" onClick={logoutHandler}>
                     <Nav.Link>Logout</Nav.Link>
                   </LinkContainer>
                 )}

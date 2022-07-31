@@ -6,7 +6,7 @@ const getAllProducts = async () => {
 };
 
 const getCategoryProducts = async (categoryName) => {
-  const categoryProducts = await productsModel.find({ category: categoryName }, { __v: 0, _id: 0 });
+  const categoryProducts = await productsModel.find({ category: categoryName }, { __v: 0 });
   return categoryProducts;
 };
 

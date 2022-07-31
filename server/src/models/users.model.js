@@ -59,7 +59,7 @@ const findUser = async (user) => {
   try {
     const foundUsers = await usersModel.find(
       { username: user.username },
-      { __v: 0, _id: 0 }
+      { __v: 0 }
     );
     const foundUser = foundUsers[0];
     return foundUser;
@@ -73,7 +73,7 @@ const findAdminUser = async (user) => {
   try {
     const userAdmins = await usersModel.find(
       { username: user.username, isAdmin: true },
-      { __v: 0, _id: 0 }
+      { __v: 0 }
     );
     const foundAdmin = userAdmins[0];
     return foundAdmin;

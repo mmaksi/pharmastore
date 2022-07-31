@@ -6,17 +6,40 @@ import { selectCartItems, selectCartTotal } from "../store/cart/cart.selector";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { clearItemFromCart } from "../store/cart/cart.action";
+import { selectUser } from "../store/users/users.selector";
+import axios from "axios";
+import { useState } from "react";
 
 const Checkout = () => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const dispatch = useDispatch();
 
   const cartItems = useSelector(selectCartItems);
   const cartTotal = useSelector(selectCartTotal);
+  const user = useSelector(selectUser)
 
   const removeCartItemHandler = (_, cartItemToRemove) => {
     console.log(cartItemToRemove);
     dispatch(clearItemFromCart(cartItems, cartItemToRemove));
   };
+
+  const sendOrderHandler = async (_, cartItems) => {
+    setIsLoading(true)
+    const orderItems = cartItems;
+    const totalPrice = cartTotal;
+    try {
+      const { data } = await axios.post(`http://localhost:8000/v1/orders`, {
+        orderItems,
+        totalPrice,
+        user
+      })
+      setIsLoading(false)
+      alert("Order successfully sent!")
+    } catch (error) {
+      alert("Failed to send orders. Please try again later.")
+    }
+  }
 
   return (
     <Container className="mt-4">
@@ -42,7 +65,7 @@ const Checkout = () => {
                 <td>{index + 1}</td>
                 <td>{item.productName}</td>
                 <td>{item.quantity}</td>
-                <td onClick={(event) => removeCartItemHandler(event, item)}>
+                <td  className="checkoutItem__remove" onClick={(event) => removeCartItemHandler(event, item)}>
                   <FontAwesomeIcon icon={faX} />
                 </td>
                 <td>${item.price}</td>
@@ -53,8 +76,8 @@ const Checkout = () => {
             <td></td> <td></td> <td></td> <td></td>
             <td>
               <span className="mb-3" style={{ display: "block" }}><strong>{`TOTAL PRICE: $${cartTotal}`}</strong></span>
-              <Button variant="outline-dark">
-                SEND MY ORDER
+              <Button disabled={ isLoading ? true : false } variant="outline-dark" onClick={(event) => sendOrderHandler(event, cartItems)}>
+                {isLoading ? "Sending order..." : "SEND MY ORDER"}
               </Button>
             </td>
           </tr>
