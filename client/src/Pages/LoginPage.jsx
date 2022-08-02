@@ -17,8 +17,6 @@ const loginSubTitle = (
   </p>
 );
 
-const API_URL = `${API_URL}`;
-
 const initialInputFields = {
   username: "",
   password: "",

@@ -8,7 +8,6 @@ import { signUpUser } from "../store/users/users.action";
 import axios from "axios";
 import API_URL from "../utils/API_URL";
 
-const API_URL = `${API_URL}`;
 const initialInputFields = { username: "", email: "", password: "" };
 
 const Register = () => {

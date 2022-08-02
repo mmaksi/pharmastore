@@ -1,26 +1,45 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import fetchOrdersStartAsync from "../store/orders/orders.action";
 import { selectOrders } from "../store/orders/orders.selector";
 import { Container } from "react-bootstrap";
 
 const Orders = () => {
+  const [allOrders, setAllOrders] = useState([]);
+  const [users, setUsers] = useState([]);
   const dispatch = useDispatch();
 
   // creating user objects based on their orders
   const orders = useSelector(selectOrders);
-  const uniqueUsers = [...new Set(orders.map(item => item.user.username))];
-  const sentOrders = uniqueUsers.map((uniqueUser) => {
-    const userOrders = orders.map((order) => {
-      if (order.user.username === uniqueUser) {
-        return [...order.orderItems]
-      }
-    })
-    const userObj = { user: uniqueUser, orders: userOrders, isDelivered: false }
-    return userObj
+  // console.log(orders);
+
+  const userOrders = orders.map((order) => {
+    const user = {...order.user}
+    user.totalPrice = order.totalPrice
+    user.userItems = order.orderItems
+
+    return {user}
   })
 
-  console.log(sentOrders);
+  const sentOrders = orders.reduce((acc, curr) => {
+    const name = curr.user.username;
+    if (acc[name]) {
+      acc[name] = [...acc[name], ...curr.orderItems];
+    } else {
+      acc[name] = [...curr.orderItems];
+    }
+    return acc;
+  }, []);
+
+  const uniqueUsers = [...new Set(orders.map((item) => item.user.username))];
+
+  // console.log(sentOrders.will[0]["_id"]);
+
+  useEffect(() => {
+    setAllOrders(sentOrders);
+  }, sentOrders);
+
+  // console.log(allOrders.will[0]["_id"]);
 
   useEffect(() => {
     dispatch(fetchOrdersStartAsync());
@@ -29,9 +48,15 @@ const Orders = () => {
   return (
     <Container>
       <h1>Orders</h1>
-      {orders.map((order) => {
-        return order.orderId;
+      {userOrders.map((order) => {
+        return (
+          <>
+            <h3>{order.user.username}</h3>
+            {order.user.userItems.map((userItem) => <p>{userItem._id}</p>)}
+          </>
+        )
       })}
+
     </Container>
   );
 };

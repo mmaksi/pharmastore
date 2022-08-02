@@ -1,6 +1,7 @@
 import axios from "axios";
 import ORDERS_ACTION_TYPES from "./orders.types";
 import createAction from "../../utils/reducer.utils";
+import API_URL from "../../utils/API_URL";
 
 const fetchOrdersStartAsync = () => async (dispatch) => {
   // dispatch startAction

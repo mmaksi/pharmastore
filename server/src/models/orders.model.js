@@ -3,12 +3,19 @@ const { v4: uuidv4 } = require('uuid');
 
 const getOrders = async () => {
   const orders = await ordersModel.find({}, { __v: 0, _id: 0 }).populate([
-    "user",
+    {
+      path: "user",
+      select: "username"
+    },
     {
       path: "orderItems",
-      populate: "product"
+      populate: {
+        path: "product",
+        model: "Product"
+      }
     },
   ]);
+
   return orders;
 };
 

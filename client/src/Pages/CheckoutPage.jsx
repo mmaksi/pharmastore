@@ -27,7 +27,7 @@ const Checkout = () => {
 
   const sendOrderHandler = async (_, cartItems) => {
     setIsLoading(true)
-    const orderItems = cartItems;
+    const orderItems = [...cartItems];
     const totalPrice = cartTotal;
     try {
       const { data } = await axios.post(`${API_URL}/orders`, {

@@ -5,7 +5,8 @@ const selectOrdersReducer = (state) => state.orders;
 export const selectOrders = createSelector(
   [selectOrdersReducer],
   (ordersReducerSlice) => {
-    return ordersReducerSlice.orders;
+    const allOrders = ordersReducerSlice.orders;
+    return allOrders
   }
 );
 
