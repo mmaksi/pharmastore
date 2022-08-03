@@ -6,6 +6,6 @@ const productsRouter = express.Router();
 productsRouter.get("/", httpGetAllProducts);
 productsRouter.get("/:categoryName", httpGetCategoryProducts);
 productsRouter.post("/", httpAddProduct);
-productsRouter.delete("/", httpDeleteProduct)
+productsRouter.delete("/:productName", httpDeleteProduct)
 
 module.exports = productsRouter;

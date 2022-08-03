@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Container, Form, Spinner } from "react-bootstrap";
 import { selectProducts } from "../store/products/products.selector";
@@ -12,14 +13,12 @@ import API_URL from "../utils/API_URL";
 
 const initialInputFields = {
   productName: "",
-  category: "",
-  price: 0,
-  imageUrl: undefined,
 };
 
 const RemoveProductForm = () => {
+  const navigate = useNavigate()
   const [show, setShow] = useState(false);
-  const [inputObject, setInputObject] = useState({});
+  const [inputObject, setInputObject] = useState(initialInputFields);
   const [validated, setValidated] = useState(false);
   const [buttonValid, setButtonValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,6 +49,7 @@ const RemoveProductForm = () => {
   /* SUBMIT HANDLER */
   const submitHandler = async (event) => {
     const form = event.currentTarget;
+    const productToDelete = form.firstElementChild.lastElementChild.value
     event.preventDefault();
     event.stopPropagation();
     setValidated(true);
@@ -59,8 +59,9 @@ const RemoveProductForm = () => {
       setValidated(false);
       setButtonValid(false);
       try {
-        await axios.post(`${API_URL}/products`, inputObject);
+        await axios.delete(`${API_URL}/products/${productToDelete}`);
         setShowAlert(true);
+        window.location.reload()
         setTimeout(() => {
           setShowAlert(false);
           setIsLoading(false);
@@ -122,7 +123,7 @@ const RemoveProductForm = () => {
                   className="me-2"
                 />
               )}
-              {isLoading ? "Please wait..." : "Add product"}
+              {isLoading ? "Please wait..." : "Remove product"}
             </Button>
           </div>
         </Form>

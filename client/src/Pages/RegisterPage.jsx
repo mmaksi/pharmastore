@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ModalConfirm from "../components/ModalConfirm";
@@ -165,7 +165,17 @@ const Register = () => {
               variant="outline-dark"
               type="submit"
             >
-              {isLoading ? "Please wait..." : "Sign up"}
+              {isLoading && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+              )}
+              {isLoading ? "Please wait..." : "Login"}
             </Button>
           </div>
         </Form>

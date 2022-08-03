@@ -18,10 +18,15 @@ const addProduct = async (product) => {
   );
 };
 
-const deleteProduct = async (product) => {
-  const foundDeletedProduct = await productsModel.findOne({ name: product.productName });
-  console.log(foundDeletedProduct)
-  // if (foundDeletedProduct) await productsModel.deleteOne({ name: product.productName });
+const deleteProduct = async (productName) => {
+  try {
+    const docs = await productsModel.findOneAndRemove({
+      productName: productName,
+    });
+    return docs
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 module.exports = { getAllProducts, getCategoryProducts, addProduct, deleteProduct };

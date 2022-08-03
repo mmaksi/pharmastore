@@ -32,7 +32,7 @@ const Navigation = () => {
 
   const logoutHandler = () => {
     dispatch(clearUser());
-    Navigate("/");
+    window.location.reload()
   };
 
   const runLogoutTimer = (dispatch, timer) => {

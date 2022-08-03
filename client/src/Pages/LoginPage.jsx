@@ -63,7 +63,6 @@ const Register = () => {
           if (user.isAdmin) dispatch(setAdmin(true));
           navigate(`/`);
         } else {
-          setInputObject(initialInputFields);
           setIsLoading(false);
           setButtonValid(false);
           setShowErrorAlert(true);
@@ -73,7 +72,6 @@ const Register = () => {
           }, 2500);
         }
       } catch (error) {
-        setInputObject(initialInputFields);
         setIsLoading(false);
         setButtonValid(false);
         setShowErrorAlert(true);

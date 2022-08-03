@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const productsSchema = new mongoose.Schema({
+const itemsSchema = new mongoose.Schema({
   productId: String,
   productName: {
     type: String,
@@ -21,12 +21,8 @@ const productsSchema = new mongoose.Schema({
   quantity: {
     type: Number,
     required: true,
-    default: 0
   },
 });
 
 // Connects productsSchema with the "products" collection
-module.exports = mongoose.model('Product', productsSchema);
-
-
-
+module.exports = mongoose.model("Item", itemsSchema);

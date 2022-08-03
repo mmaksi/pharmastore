@@ -20,7 +20,7 @@ const httpGetCategoryProducts = async (req, res) => {
 
 const httpAddProduct = async (req, res) => {
   let product = req.body;
-  console.log(product)
+  console.log(product);
   if (
     !product.productName ||
     !product.category ||
@@ -37,15 +37,16 @@ const httpAddProduct = async (req, res) => {
 };
 
 const httpDeleteProduct = async (req, res) => {
-  const product = req.body
-  if (!product.productName) res.status(400).json({ error: "missing required properties" });
-  await deleteProduct(product)
-  // res.status(200).json(deletedProduct);
-}
+  const productName = req.params.productName;
+  console.log(productName)
+  const deletedOrder = await deleteProduct(productName);
+  if (deletedOrder) return res.status(200).json(deletedOrder);
+  return res.status(404).json({ error: "order not found" });
+};
 
 module.exports = {
   httpGetAllProducts,
   httpGetCategoryProducts,
   httpAddProduct,
-  httpDeleteProduct
+  httpDeleteProduct,
 };

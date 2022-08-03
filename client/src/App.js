@@ -9,7 +9,7 @@ import AddProduct from "./Pages/AddProduct";
 import RemoveProduct from "./Pages/RemoveProduct";
 import { selectIsAdmin, selectUser, selectUserIsLoggedIn } from "./store/users/users.selector";
 import { useSelector } from "react-redux";
-import Orders from "./components/Orders";
+import Orders from "./Pages/Orders";
 
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
   let homeRoute = <CategoriesPage />
 
   if (isAdmin && isLoggedIn) {
-    homeRoute = <AddProduct />
+    homeRoute = <Orders />
   } else if (!isAdmin && isLoggedIn) {
     homeRoute = <CategoriesPage />
   } else if (!isAdmin && !isLoggedIn) {
