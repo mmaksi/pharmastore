@@ -17,11 +17,12 @@ const CategoryItem = ({ title, img, grid }) => {
         <div className="categoryItem__button">
           <h4 className="text-center text-uppercase font-weight-bold">{title}</h4>
           <Button
+          className="button"
             variant="outline-light"
             size="lg"
             onClick={shopHandler}
           >
-            SHOP DRUGS
+            SEE MORE
           </Button>
         </div>
       </Card>

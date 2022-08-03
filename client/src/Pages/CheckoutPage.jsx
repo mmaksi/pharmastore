@@ -79,6 +79,7 @@ const Checkout = () => {
                 <strong>{`TOTAL PRICE: $${cartTotal}`}</strong>
               </span>
               <Button
+              className="button"
                 disabled={isLoading || !cartItems.length ? true : false}
                 variant="outline-dark"
                 onClick={(event) => sendOrderHandler(event, cartItems)}

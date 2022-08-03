@@ -1,0 +1,6 @@
+.button {
+    &:active {
+        background-color: #333a42;
+        transform: scale(0.90);
+    }
+}
