@@ -26,7 +26,6 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
-  console.log("params", params);
 
   /* EVENT HANDLERS */
   const handleClose = () => setShow(false);

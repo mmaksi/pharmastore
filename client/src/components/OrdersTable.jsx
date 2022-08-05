@@ -7,7 +7,6 @@ import API_URL from "../utils/API_URL";
 import { ReactComponent as MailLoader } from "../assets/mail-1.svg";
 
 const OrdersTable = ({ orders }) => {
-  console.log(orders);
   const deleteOrderHandler = async (event) => {
     const deliveredOrderId =
       event.target.parentNode.parentNode.parentNode.firstElementChild.innerText;

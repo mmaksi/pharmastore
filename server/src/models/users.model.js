@@ -17,10 +17,6 @@ const getAuthenticatedUser = async (user) => {
   const foundAdmin = await findAdminUser(user);
   // Find basic user
   const foundUser = await findUser(user);
-  console.log("foundAdmin", foundAdmin);
-  console.log("foundAdmin", !!foundAdmin);
-  console.log("foundUser", foundUser);
-  console.log("foundUser", !!foundUser);
 
   try {
     const isPassVerified = await bcrypt.compare(

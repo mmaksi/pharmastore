@@ -21,7 +21,6 @@ const Checkout = () => {
   const user = useSelector(selectUser);
 
   const removeCartItemHandler = (_, cartItemToRemove) => {
-    console.log(cartItemToRemove);
     dispatch(clearItemFromCart(cartItems, cartItemToRemove));
   };
 
@@ -29,7 +28,6 @@ const Checkout = () => {
     setIsLoading(true);
     const orderItems = [...cartItems];
     const totalPrice = cartTotal;
-    console.log({ orderItems, totalPrice, user });
     try {
       await axios.post(`${API_URL}/orders`, {
         orderItems,
