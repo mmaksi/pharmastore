@@ -7,15 +7,13 @@ import API_URL from "../utils/API_URL";
 import { ReactComponent as MailLoader } from "../assets/mail-1.svg";
 
 const OrdersTable = ({ orders }) => {
-  const [showLoader, setShowLoader] = useState(false);
-  const [showJSX, setShowJSX] = useState(true);
-
+  console.log(orders);
   const deleteOrderHandler = async (event) => {
     const deliveredOrderId =
       event.target.parentNode.parentNode.parentNode.firstElementChild.innerText;
     try {
-      window.location.reload();
       await axios.delete(`${API_URL}/orders/${deliveredOrderId}`);
+      window.location.reload();
     } catch (error) {
       alert("Cannot set this order as delivered. Try again please.");
     }

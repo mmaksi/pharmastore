@@ -39,6 +39,7 @@ const Navigation = () => {
 
   const logoutHandler = () => {
     dispatch(clearUser());
+    setMenuOpen(!menuOpen)
     navigate("/");
   };
 
@@ -75,7 +76,7 @@ const Navigation = () => {
             onHide={handleClose}
           >
             {/* Offcanvas header and title */}
-            <Offcanvas.Header >
+            <Offcanvas.Header closeButton={true}>
               <Offcanvas.Title id={`offcanvasNavbarLabel-expand-false`}>
                 {isLoggedIn
                   ? `Hi, ${user.username.toUpperCase()}`
