@@ -2,7 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import "./Cart.scss";
 
-const Cart = ({count}) => {
+interface IProps {
+  count: number
+}
+
+const Cart: React.FC<IProps> = ({ count }) => {
   return (
     <>
      <FontAwesomeIcon icon={faCartShopping} />

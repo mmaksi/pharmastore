@@ -2,7 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { Col, Card, Button } from "react-bootstrap";
 import "./CategoriesCard.scss";
 
-const CategoryItem = ({ title, img, grid }) => {
+interface IProps {
+  title: string,
+  img: string,
+  grid: number
+}
+
+const CategoryItem: React.FC<IProps> = ({ title, img, grid }) => {
   const navigate = useNavigate();
 
   const shopHandler = () => {

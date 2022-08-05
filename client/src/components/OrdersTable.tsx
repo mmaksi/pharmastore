@@ -4,12 +4,15 @@ import { Form } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
 import API_URL from "../utils/API_URL";
-import { ReactComponent as MailLoader } from "../assets/mail-1.svg";
 
-const OrdersTable = ({ orders }) => {
-  const deleteOrderHandler = async (event) => {
-    const deliveredOrderId =
-      event.target.parentNode.parentNode.parentNode.firstElementChild.innerText;
+interface IProps {
+  orders: any
+}
+
+const OrdersTable: React.FC<IProps> = ({ orders }) => {
+  const deleteOrderHandler = async (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+    const checkBoxElement = event.target! as HTMLInputElement
+    const deliveredOrderId = (checkBoxElement?.parentElement?.parentNode?.parentNode?.firstElementChild as HTMLTableCellElement).innerText;
     try {
       await axios.delete(`${API_URL}/orders/${deliveredOrderId}`);
       window.location.reload();

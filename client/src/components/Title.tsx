@@ -1,6 +1,11 @@
 import React from "react";
 
-const Title = ({ title, width = "25%" }) => {
+interface IProps {
+  title: string;
+  width: string
+}
+
+const Title: React.FC<IProps> = ({ title, width = "25%" }) => {
   return (
     <div className="dashboardBody__main text-center m-auto">
       <h2>{title.toUpperCase()}</h2>

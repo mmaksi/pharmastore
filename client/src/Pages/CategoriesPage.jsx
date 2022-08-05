@@ -1,5 +1,5 @@
 import { Container, Row, } from "react-bootstrap";
-import CategoryItem from "../components/CategoriesCard";
+import CategoryItem from "../components/CategoryItem";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/users/users.selector";
 
