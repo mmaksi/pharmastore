@@ -17,7 +17,7 @@ const Title: React.FC<IProps> = ({ title, width = "25%" }) => {
           color: "#1F2226",
           height: "1px",
         }}
-      />{" "}
+      />
     </div>
   );
 };

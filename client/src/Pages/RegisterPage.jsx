@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import ModalConfirm from "../components/ModalConfirm";
+import { Link, useNavigate } from "react-router-dom";
 import Title from "../components/Title";
 import { signUpUser } from "../store/users/users.action";
 import axios from "axios";
@@ -16,20 +15,16 @@ const Register = () => {
   const [inputObject, setInputObject] = useState(initialInputFields);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonValid, setButtonValid] = useState(true);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   const { username, email, password } = inputObject;
 
   // Modal states
-  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const params = useParams();
 
   /* EVENT HANDLERS */
-  const handleClose = () => setShow(false);
-
   const changeHandler = (event) => {
     const inputName = event.target.name;
     const inputValue = event.target.value;
@@ -57,7 +52,7 @@ const Register = () => {
           dispatch(signUpUser(user));
           setTimeout(() => {
             navigate(`/`);
-          }, 2500);
+          }, 2000);
         }
       } catch (error) {
         setInputObject(initialInputFields);
@@ -83,7 +78,7 @@ const Register = () => {
 
   return (
     <>
-      {(showAlert || showErrorAlert) && (
+      {(showSuccessAlert || showErrorAlert) && (
         <Alert
           className="alert"
           variant={showErrorAlert ? "danger" : "success"}
@@ -93,15 +88,7 @@ const Register = () => {
             : `Welcome!`}
         </Alert>
       )}
-
-      <ModalConfirm
-        show={show}
-        handleClose={handleClose}
-        title="Confirm your deletion"
-        body="This will permenantly delete the product from the database. Are you sure
-        of your action?"
-        action="DELETE"
-      />
+     
       <Title title="Sign Up" width="40%" />
 
       <Container className="text-center mt-3 pb-4">
@@ -174,7 +161,7 @@ const Register = () => {
                   className="me-2"
                 />
               )}
-              {isLoading ? "Please wait..." : "Login"}
+              {isLoading ? "Please wait..." : "Sign Up"}
             </Button>
           </div>
         </Form>

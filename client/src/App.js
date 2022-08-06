@@ -7,13 +7,12 @@ import Navigation from "./Pages/Navigation";
 import Register from "./Pages/RegisterPage";
 import AddProduct from "./Pages/AddProduct";
 import RemoveProduct from "./Pages/RemoveProduct";
-import { selectIsAdmin, selectUser, selectUserIsLoggedIn } from "./store/users/users.selector";
+import { selectIsAdmin, selectUserIsLoggedIn } from "./store/users/users.selector";
 import { useSelector } from "react-redux";
 import Orders from "./Pages/Orders";
 
 
 function App() {
-  const user = useSelector(selectUser)
   const isLoggedIn = useSelector(selectUserIsLoggedIn)
   const isAdmin = useSelector(selectIsAdmin)
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Container, Form, Spinner } from "react-bootstrap";
 import {
@@ -20,14 +19,11 @@ const initialInputFields = {
 };
 
 const RemoveProductForm = () => {
-  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [inputObject, setInputObject] = useState(initialInputFields);
   const [validated, setValidated] = useState(false);
   const [buttonValid, setButtonValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -41,9 +37,6 @@ const RemoveProductForm = () => {
   const handleClose = () => setShow(false);
 
   const changeHandler = (event) => {
-    const inputField =
-      event.currentTarget.parentNode.parentNode.lastElementChild
-        .lastElementChild;
     const inputName = event.target.name;
     const inputValue = event.target.value;
 
@@ -64,20 +57,14 @@ const RemoveProductForm = () => {
       setButtonValid(false);
       try {
         await axios.delete(`${API_URL}/products/${productToDelete}`);
-        setShowAlert(true);
         window.location.reload();
         setTimeout(() => {
-          setShowAlert(false);
           setIsLoading(false);
           setButtonValid(true);
         }, 2500);
       } catch (error) {
         setIsLoading(false);
         setButtonValid(true);
-        setShowErrorAlert(true);
-        setTimeout(() => {
-          setShowErrorAlert(false);
-        }, 2500);
       }
     }
   };

@@ -1,18 +1,23 @@
 import axios from "axios";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Form } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
 import API_URL from "../utils/API_URL";
 
 interface IProps {
-  orders: any
+  orders: any;
 }
 
 const OrdersTable: React.FC<IProps> = ({ orders }) => {
-  const deleteOrderHandler = async (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-    const checkBoxElement = event.target! as HTMLInputElement
-    const deliveredOrderId = (checkBoxElement?.parentElement?.parentNode?.parentNode?.firstElementChild as HTMLTableCellElement).innerText;
+  const deleteOrderHandler = async (
+    event: React.MouseEvent<HTMLInputElement, MouseEvent>
+  ) => {
+    const checkBoxElement = event.target! as HTMLInputElement;
+    const deliveredOrderId = (
+      checkBoxElement?.parentElement?.parentNode?.parentNode
+        ?.firstElementChild as HTMLTableCellElement
+    ).innerText;
     try {
       await axios.delete(`${API_URL}/orders/${deliveredOrderId}`);
       window.location.reload();
@@ -23,7 +28,7 @@ const OrdersTable: React.FC<IProps> = ({ orders }) => {
 
   return (
     <>
-        <Container className="mt-4">
+      <Container className="mt-4">
         <Table bordered={false} borderless={false} responsive="md">
           <thead>
             <tr className="text-center">
@@ -53,8 +58,9 @@ const OrdersTable: React.FC<IProps> = ({ orders }) => {
                     <td>{order.orderItems[0].productName}</td>
                     <td>{order.orderItems[0].quantity}</td>
                   </tr>
-                  {order.orderItems.map((orderItem, index) => {
-                    if (index != 0) {
+                  {order.orderItems
+                    .filter((_, index) => index !== 0)
+                    .map((orderItem, index) => {
                       return (
                         <tr key={orderItem.productId}>
                           <td colSpan={4}></td>
@@ -62,8 +68,7 @@ const OrdersTable: React.FC<IProps> = ({ orders }) => {
                           <td>{orderItem.quantity}</td>
                         </tr>
                       );
-                    }
-                  })}
+                    })}
                 </Fragment>
               );
             })}

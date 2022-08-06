@@ -30,7 +30,7 @@ const Register = () => {
   const [inputObject, setInputObject] = useState(initialInputFields);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonValid, setButtonValid] = useState(true);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   const { username, password } = inputObject;
@@ -58,6 +58,7 @@ const Register = () => {
           username,
           password,
         });
+        console.log("user", user)
         if (user.username) {
           dispatch(signInUser(user));
           if (user.isAdmin) dispatch(setAdmin(true));
