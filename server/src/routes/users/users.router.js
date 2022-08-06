@@ -1,10 +1,22 @@
 const express = require("express");
-const { httpAddUser, httpGetAllUsers, httpGetUser } = require("./users.controller");
+const jwt = require("jsonwebtoken");
+const { httpAddUser, httpGetAllUsers } = require("./users.controller");
+
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "no authorization header" });
+    
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (error, user) => {
+    if (error) return res.status(403).json(error);
+    req.user = user;
+    next();
+});
+};
 
 const usersRouter = express.Router();
 
-usersRouter.post("/", httpAddUser);
-usersRouter.get("/", httpGetAllUsers);
-usersRouter.get("/:userName", httpGetUser);
+usersRouter.get("/", authenticateToken, httpGetAllUsers);
+usersRouter.post("/", authenticateToken, httpAddUser);
 
 module.exports = usersRouter;

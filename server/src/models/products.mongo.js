@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 
 const productsSchema = new mongoose.Schema({
-  productId: String,
+  productId: {
+    type: String,
+  },
   productName: {
     type: String,
     required: true,
@@ -17,12 +19,7 @@ const productsSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    default: 0
-  },
+  }
 });
 
 // Connects productsSchema with the "products" collection

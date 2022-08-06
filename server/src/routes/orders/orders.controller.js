@@ -4,7 +4,7 @@ const {
   addOrder,
   getItems,
   deleteOrder
-} = require("../models/orders.model");
+} = require("../../models/orders.model");
 const { v4: uuidv4 } = require("uuid");
 
 const httpAddOrder = async (req, res) => {
@@ -18,15 +18,15 @@ const httpGetOrderById = async (req, res) => {
   const orderId = req.params.orderId;
   const orderById = await getOrderById(orderId);
   if (orderById) return res.status(200).json(orderById);
-  res.status(404).json({ error: "order not found " });
+  res.status(404).json({ error: "order not found" });
 };
 
-const httpGetOrders = async (req, res) => {
+const httpGetOrders = async (_, res) => {
   const orders = await getOrders();
   if (orders) return res.status(200).json(orders);
 };
 
-const httpGetOrderItems = async (req, res) => {
+const httpGetOrderItems = async (_, res) => {
   const items = await getItems();
   if (items) return res.status(200).json(items);
 }

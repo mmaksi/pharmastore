@@ -12,29 +12,6 @@ const getAllUsers = async () => {
   }
 };
 
-const getAuthenticatedUser = async (user) => {
-  // Find admin
-  const foundAdmin = await findAdminUser(user);
-  // Find basic user
-  const foundUser = await findUser(user);
-
-  try {
-    const isPassVerified = await bcrypt.compare(
-      user.password,
-      foundUser.password
-    );
-
-    if (foundAdmin && isPassVerified) {
-      return foundAdmin;
-    } else if (foundUser && isPassVerified) {
-      return foundUser;
-    }
-    return { error: `Wrong password` };
-  } catch (error) {
-    return error;
-  }
-};
-
 const addUser = async (userToAdd) => {
   const userId = uuidv4();
   try {
@@ -50,33 +27,40 @@ const addUser = async (userToAdd) => {
   }
 };
 
-// Implementation details
+/* Implementation details */
 const findUser = async (user) => {
   try {
-    const foundUsers = await usersModel.find(
+    const foundUser = await usersModel.findOne(
       { username: user.username },
       { __v: 0 }
     );
-    const foundUser = foundUsers[0];
     return foundUser;
   } catch (error) {
-    console.error("auth model", error);
     return error;
   }
 };
 
-const findAdminUser = async (user) => {
-  try {
-    const userAdmins = await usersModel.find(
-      { username: user.username, isAdmin: true },
-      { __v: 0 }
-    );
-    const foundAdmin = userAdmins[0];
-    return foundAdmin;
-  } catch (error) {
-    console.error("auth model", error);
-    return error;
-  }
+const authenticateUser = async (userToAuthenticate) => {
+  const { password: signInPassword } = userToAuthenticate;
+  // authenticate by querying the DB by name
+  const existedUser = await findUser(userToAuthenticate);
+  if (!existedUser) return false
+  // authenticate password
+  const existedHashedPassword = existedUser ? existedUser.password : null;
+  const passwordIsMatched = checkMatchingPasswords(
+    signInPassword,
+    existedHashedPassword
+  );
+  if (existedUser && passwordIsMatched) return existedUser;
+  return false;
 };
 
-module.exports = { getAllUsers, getAuthenticatedUser, addUser };
+const checkMatchingPasswords = (signInPassword, existedHashedPassword) => {
+  return bcrypt.compareSync(signInPassword, existedHashedPassword);
+};
+
+module.exports = {
+  getAllUsers,
+  addUser,
+  authenticateUser,
+};
