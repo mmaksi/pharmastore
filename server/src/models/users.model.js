@@ -16,14 +16,25 @@ const addUser = async (userToAdd) => {
   const userId = uuidv4();
   try {
     const hashedPassword = await bcrypt.hash(userToAdd.password, 10);
-    const newUser = await usersModel.findOneAndUpdate(
-      { username: userToAdd.username },
-      { ...userToAdd, userId, password: hashedPassword, isAdmin: false },
-      { upsert: true }
-    );
-    return { ...userToAdd, userId, password: hashedPassword, isAdmin: false };
+    const newUser = await usersModel.findOne({ username: userToAdd.username });
+    if (newUser) {
+      return { error: "member already exists" };
+    } else {
+      return { ...userToAdd, userId, password: hashedPassword, isAdmin: false };
+    }
   } catch (error) {
     console.error(error);
+  }
+};
+
+const saveUser = async (user) => {
+  const newUser = new usersModel({ ...user });
+  // Save the document only if the user does not already exist in the database
+  try {
+    const foundUser = await findUser(user);
+    if (!foundUser) return newUser.save();
+  } catch (error) {
+    console.error(`Can't add the user: ${error}`);
   }
 };
 
@@ -44,7 +55,7 @@ const authenticateUser = async (userToAuthenticate) => {
   const { password: signInPassword } = userToAuthenticate;
   // authenticate by querying the DB by name
   const existedUser = await findUser(userToAuthenticate);
-  if (!existedUser) return false
+  if (!existedUser) return false;
   // authenticate password
   const existedHashedPassword = existedUser ? existedUser.password : null;
   const passwordIsMatched = checkMatchingPasswords(
@@ -61,6 +72,6 @@ const checkMatchingPasswords = (signInPassword, existedHashedPassword) => {
 
 module.exports = {
   getAllUsers,
-  addUser,
+  saveUser,
   authenticateUser,
 };

@@ -23,9 +23,6 @@ const usersSchema = new mongoose.Schema(
       default: false,
     },
   },
-  {
-    timestamps: true,
-  }
 );
 
 // Connects usersSchema with the "launches" collection

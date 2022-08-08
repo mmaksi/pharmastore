@@ -24,24 +24,29 @@ const itemsSchema = new mongoose.Schema({
   },
 });
 
-const orderSchema = mongoose.Schema({
-  orderId: String,
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
+const orderSchema = mongoose.Schema(
+  {
+    orderId: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    orderItems: [itemsSchema],
+    totalPrice: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    isDelivered: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
-  orderItems: [itemsSchema],
-  totalPrice: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  isDelivered: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model("Order", orderSchema);

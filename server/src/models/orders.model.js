@@ -2,7 +2,7 @@ const ordersModel = require("./orders.mongo");
 const itemsModel = require("./items.mongo");
 
 const getOrders = async () => {
-  const orders = await ordersModel.find({}, { __v: 0 }).populate([
+  const orders = await ordersModel.find({ isDelivered: false }, { __v: 0 }).populate([
     {
       path: "user",
       select: "username",
@@ -13,6 +13,19 @@ const getOrders = async () => {
   ]);
   return orders;
 };
+
+const getDeliveredOrders = async () => {
+  const deliveredOrders = await ordersModel.find({ isDelivered: true }, { __v: 0 }).populate([
+    {
+      path: "user",
+      select: "username",
+    },
+    {
+      path: "orderItems"
+    },
+  ]);
+  return deliveredOrders;
+}
 
 const getItems = async () => {
   const items = await itemsModel.find({}, { __v: 0 });
@@ -36,21 +49,28 @@ const saveOrder = async (order) => {
   );
 };
 
-const deleteOrder = async (orderId) => {
+const setDeliveredOrder = async (order) => {
   try {
-    const docs = await ordersModel.findOneAndRemove({
-      orderId: orderId,
-    });
-    return docs
+    await ordersModel.findOneAndUpdate({
+      orderId: order.orderId,
+    }, order);
+    return order
   } catch (error) {
     console.log(error);
   }
 };
 
+const findOrder = async (orderId) => {
+  const order = ordersModel.findOne({ orderId }, { _id: 0, __v: 0 })
+  return order
+}
+
 module.exports = {
   getOrderById,
   getOrders,
+  getDeliveredOrders,
   addOrder,
   getItems,
-  deleteOrder
+  setDeliveredOrder,
+  findOrder
 };
