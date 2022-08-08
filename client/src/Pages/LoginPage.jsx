@@ -58,7 +58,6 @@ const Register = () => {
           username,
           password,
         });
-        console.log("user", user)
         if (user.username) {
           dispatch(signInUser(user));
           if (user.isAdmin) dispatch(setAdmin(true));

@@ -3,6 +3,7 @@ import {
   faCirclePlus,
   faCircleMinus,
   faStore,
+  faClockRotateLeft
 } from "@fortawesome/free-solid-svg-icons";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
@@ -142,6 +143,17 @@ const Navigation = () => {
                     </Nav.Link>
                   </LinkContainer>
                 )}
+
+                {/* Offcanvas body - Reports */}
+                {isAdmin && (
+                  <LinkContainer onClick={toggleMenu} to="/reports">
+                    <Nav.Link>
+                      <FontAwesomeIcon icon={faClockRotateLeft} className="me-2" />
+                      Reports
+                    </Nav.Link>
+                  </LinkContainer>
+                )}
+
               </Nav>
             </Offcanvas.Body>
           </Navbar.Offcanvas>

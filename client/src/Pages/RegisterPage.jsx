@@ -54,6 +54,7 @@ const Register = () => {
             navigate(`/`);
           }, 2000);
         }
+        alert("User already exists with these credentials.")
       } catch (error) {
         setInputObject(initialInputFields);
         setIsLoading(false);

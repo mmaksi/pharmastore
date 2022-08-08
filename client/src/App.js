@@ -10,6 +10,7 @@ import RemoveProduct from "./Pages/RemoveProduct";
 import { selectIsAdmin, selectUserIsLoggedIn } from "./store/users/users.selector";
 import { useSelector } from "react-redux";
 import Orders from "./Pages/Orders";
+import Reports from "./Pages/Reports";
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path="addProduct" element={<AddProduct />} />
           <Route path="removeProduct" element={<RemoveProduct />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="reports" element={<Reports />} />
         </Route>
       </Routes>
     </>
