@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
-import * as dayjs from "dayjs";
 dayjs().format();
 
 const getOrderFullDate = (orderISODate) => {
