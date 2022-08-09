@@ -7,7 +7,12 @@ import { signUpUser } from "../store/users/users.action";
 import axios from "axios";
 import API_URL from "../utils/API_URL";
 
-const initialInputFields = { username: "", email: "", password: "", pharmacistId: "" };
+const initialInputFields = {
+  username: "",
+  email: "",
+  password: "",
+  pharmacistId: "",
+};
 
 const Register = () => {
   // Form states
@@ -17,9 +22,11 @@ const Register = () => {
   const [buttonValid, setButtonValid] = useState(true);
   const [showSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { username, email, password, pharmacistId } = inputObject;
 
+  console.log(inputObject);
   // Modal states
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,17 +54,13 @@ const Register = () => {
           username,
           email,
           password,
-          pharmacistId
+          pharmacistId,
         });
-        if (user.username) {
-          dispatch(signUpUser(user));
-          setTimeout(() => {
-            navigate(`/`);
-          }, 2000);
-        }
-        alert("User already exists with these credentials.");
+        dispatch(signUpUser(user));
+        navigate(`/`);
       } catch (error) {
-        setInputObject(initialInputFields);
+        const serverErrorMessage = error.response.data.error;
+        setErrorMessage(serverErrorMessage);
         setIsLoading(false);
         setButtonValid(false);
         setShowErrorAlert(true);
@@ -85,9 +88,7 @@ const Register = () => {
           className="alert"
           variant={showErrorAlert ? "danger" : "success"}
         >
-          {showErrorAlert
-            ? `Something went wrong! Please try again.`
-            : `Welcome!`}
+          {showErrorAlert ? `${errorMessage}` : `Welcome!`}
         </Alert>
       )}
 

@@ -8,7 +8,7 @@ const httpSignUp = async ({ body: user }, res) => {
   const { username, email, password, pharmacistId } = user;
   // Check user inputs
   if (!username || !email || !password || !pharmacistId)
-    return res.status(400).json({ error: "required fields are missing" });
+    return res.status(400).json({ error: "Required fields are missing" });
   // Save user if inputs are valid
   try {
     const response = await addUser(user);

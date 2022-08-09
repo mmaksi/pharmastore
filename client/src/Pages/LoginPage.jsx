@@ -30,6 +30,7 @@ const Register = () => {
   const [inputObject, setInputObject] = useState(initialInputFields);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonValid, setButtonValid] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("")
   const [showAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
@@ -72,6 +73,8 @@ const Register = () => {
           }, 2500);
         }
       } catch (error) {
+        const serverErrorMessage = error.response.data.error
+        setErrorMessage(serverErrorMessage)
         setIsLoading(false);
         setButtonValid(false);
         setShowErrorAlert(true);
@@ -90,7 +93,7 @@ const Register = () => {
           className="alert"
           variant={showErrorAlert ? "danger" : "info"}
         >
-          {showErrorAlert ? `Wrong username or password!` : `Welcome!`}
+          {showErrorAlert ? `${errorMessage}` : `Welcome!`}
         </Alert>
       )}
 
