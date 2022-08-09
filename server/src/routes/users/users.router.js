@@ -1,7 +1,8 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const { httpAddUser, httpGetAllUsers } = require("./users.controller");
+const { httpGetUsers } = require("./users.controller");
 
+// JWT middleware
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -16,7 +17,6 @@ const authenticateToken = (req, res, next) => {
 
 const usersRouter = express.Router();
 
-usersRouter.get("/", authenticateToken, httpGetAllUsers);
-usersRouter.post("/", authenticateToken, httpAddUser);
+usersRouter.get("/", httpGetUsers);
 
 module.exports = usersRouter;

@@ -7,7 +7,7 @@ import { signUpUser } from "../store/users/users.action";
 import axios from "axios";
 import API_URL from "../utils/API_URL";
 
-const initialInputFields = { username: "", email: "", password: "" };
+const initialInputFields = { username: "", email: "", password: "", pharmacistId: "" };
 
 const Register = () => {
   // Form states
@@ -18,7 +18,7 @@ const Register = () => {
   const [showSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
-  const { username, email, password } = inputObject;
+  const { username, email, password, pharmacistId } = inputObject;
 
   // Modal states
   const dispatch = useDispatch();
@@ -47,6 +47,7 @@ const Register = () => {
           username,
           email,
           password,
+          pharmacistId
         });
         if (user.username) {
           dispatch(signUpUser(user));
@@ -54,7 +55,7 @@ const Register = () => {
             navigate(`/`);
           }, 2000);
         }
-        alert("User already exists with these credentials.")
+        alert("User already exists with these credentials.");
       } catch (error) {
         setInputObject(initialInputFields);
         setIsLoading(false);
@@ -89,7 +90,7 @@ const Register = () => {
             : `Welcome!`}
         </Alert>
       )}
-     
+
       <Title title="Sign Up" width="40%" />
 
       <Container className="text-center mt-3 pb-4">
@@ -141,6 +142,21 @@ const Register = () => {
             />
             <Form.Control.Feedback type="invalid">
               Invalid password.
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          {/* pharmacist ID */}
+          <Form.Group className="mb-3">
+            <Form.Label>Pharmacist ID</Form.Label>
+            <Form.Control
+              required
+              onChange={changeHandler}
+              type="text"
+              placeholder="Type your pharmacist ID"
+              name="pharmacistId"
+            />
+            <Form.Control.Feedback type="invalid">
+              Invalid field.
             </Form.Control.Feedback>
           </Form.Group>
 

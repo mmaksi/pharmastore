@@ -1,14 +1,6 @@
 import { Modal, Button } from "react-bootstrap";
 
-interface IProps {
-  show: boolean;
-  handleClose: () => void;
-  title: string;
-  body: string;
-  action: string;
-}
-
-const ModalConfirm: React.FC<IProps> = ({ show, handleClose, title, body, action }) => {
+const ModalConfirm = ({ show, handleClose, title, body, action }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>

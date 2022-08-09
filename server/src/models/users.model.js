@@ -1,77 +1,96 @@
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
-
+const idsModel = require("./ids.mongo");
 const usersModel = require("./users.mongo");
+const { findPharmacistId } = require("./ids.model");
 
-const getAllUsers = async () => {
-  try {
-    const users = await usersModel.find({}, { __v: 0 });
-    return users;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const addUser = async (userToAdd) => {
+const addUser = async ({ pharmacistId, username, email, password }) => {
   const userId = uuidv4();
+  // Check if pharmacistId is true
+  const checkIdExists = await findPharmacistId(pharmacistId);
+  console.log("checkIdExists", checkIdExists);
+  if (!checkIdExists) return { error: "Pharmacist ID is not found" };
   try {
-    const hashedPassword = await bcrypt.hash(userToAdd.password, 10);
-    const newUser = await usersModel.findOne({ username: userToAdd.username });
-    if (newUser) {
-      return { error: "member already exists" };
+    // Hash user's password before saving it in the database
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // Checks if user already exists by username
+    const foundUser = await findUserByUsername(username);
+    if (foundUser) {
+      return { error: "User already exists" };
     } else {
-      return { ...userToAdd, userId, password: hashedPassword, isAdmin: false };
+      // Save user only if it doens't already exist && if he has a valid pharmacist ID
+      const user = {
+        userId,
+        username,
+        email,
+        password: hashedPassword,
+        isAdmin: false,
+      };
+      await saveUser(user);
+      return user;
     }
   } catch (error) {
     console.error(error);
   }
 };
 
-const saveUser = async (user) => {
-  const newUser = new usersModel({ ...user });
-  // Save the document only if the user does not already exist in the database
-  try {
-    const foundUser = await findUser(user);
-    if (!foundUser) return newUser.save();
-  } catch (error) {
-    console.error(`Can't add the user: ${error}`);
-  }
+const getUsers = async () => {
+  const users = await usersModel.find({}, { __v: 0 });
+  return users
 };
 
-/* Implementation details */
-const findUser = async (user) => {
+const authenticateUser = async ({ username, password: signInPassword }) => {
+  // Check username validity
+  const existedUser = await findUserByUsername(username);
+  if (!existedUser) return { error: "Wrong username" };
+
+  // Check password validity
+  const existedHashedPassword = existedUser ? existedUser.password : null;
+  const passwordIsMatched = checkMatchingPasswords(
+    signInPassword,
+    existedHashedPassword
+  );
+  if (!passwordIsMatched) return { error: "Wrong password" };
+
+  // Return the queried user onyl if both username and password are valid
+  if (existedUser && passwordIsMatched) return existedUser;
+};
+
+/* Implementation details for the model only */
+const findUserByUsername = async (username) => {
   try {
-    const foundUser = await usersModel.findOne(
-      { username: user.username },
-      { __v: 0 }
-    );
+    const foundUser = await usersModel.findOne({ username }, { __v: 0 });
     return foundUser;
   } catch (error) {
     return error;
   }
 };
 
-const authenticateUser = async (userToAuthenticate) => {
-  const { password: signInPassword } = userToAuthenticate;
-  // authenticate by querying the DB by name
-  const existedUser = await findUser(userToAuthenticate);
-  if (!existedUser) return false;
-  // authenticate password
-  const existedHashedPassword = existedUser ? existedUser.password : null;
-  const passwordIsMatched = checkMatchingPasswords(
-    signInPassword,
-    existedHashedPassword
-  );
-  if (existedUser && passwordIsMatched) return existedUser;
-  return false;
-};
-
 const checkMatchingPasswords = (signInPassword, existedHashedPassword) => {
   return bcrypt.compareSync(signInPassword, existedHashedPassword);
 };
 
+const saveUser = async (user) => {
+  const newUser = new usersModel({ ...user });
+  // Save the document only if the user does not already exist in the database
+  return newUser.save();
+};
+
+const saveId = async (id) => {
+  const newId = new idsModel({ pharmacistId: id });
+  // Save the document only if the user id does not already exist in the database
+  try {
+    const foundId = await findPharmacistId(id);
+    if (!foundId) return newId.save();
+  } catch (error) {
+    console.error(`Can't add the user: ${error}`);
+  }
+};
+
 module.exports = {
-  getAllUsers,
-  saveUser,
+  addUser,
+  getUsers,
   authenticateUser,
+  findPharmacistId,
+  saveId,
 };

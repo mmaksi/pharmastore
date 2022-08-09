@@ -6,6 +6,7 @@ import Table from "react-bootstrap/Table";
 import API_URL from "../utils/API_URL";
 
 const OrdersTable = ({ orders }) => {
+
   const deleteOrderHandler = async (event) => {
     const checkBoxElement = event.target;
     const deliveredOrderId =
@@ -13,7 +14,7 @@ const OrdersTable = ({ orders }) => {
         ?.firstElementChild).innerText;
     try {
       await axios.delete(`${API_URL}/orders/${deliveredOrderId}`);
-      window.location.reload();
+      window.location.reload(); // refresh page
     } catch (error) {
       alert("Cannot set this order as delivered. Try again please.");
     }

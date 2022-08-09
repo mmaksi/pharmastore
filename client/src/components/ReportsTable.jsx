@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
-dayjs().format();
 
 const getOrderFullDate = (orderISODate) => {
   const ISOString = orderISODate.updatedAt;

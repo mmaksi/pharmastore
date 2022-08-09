@@ -20,7 +20,6 @@ const Reports = () => {
     getDeliveredOrders();
   }, []);
 
-  console.log(deliveredOrders);
   return (
     <Container>
       {loading && (
