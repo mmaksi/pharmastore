@@ -8,12 +8,8 @@
   "main": "index.js",
   "scripts": {
     "install-server": "cd server && npm install",
-    "install-client": "cd client && npm install",
-    "install": "npm run install-server && npm run install-client",
-    "server": "cd server && npm run watch",
-    "client": "npm start --prefix client",
-    "watch": "npm run server & npm run client",
-    "deploy": "npm run build --prefix client"
+    "start-server": "cd server && npm start",
+    "start": "npm run install-server && npm run start-server"
   },
   "repository": {
     "type": "git",
