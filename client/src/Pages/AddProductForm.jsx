@@ -12,6 +12,14 @@ const initialInputFields = {
   price: 1,
 };
 
+const PRODUCTS_CATEGORIES = [
+  "hypertension",
+  "heart-failure",
+  "anti-histamine",
+  "anti-inflammatory",
+  "diabetes",
+];
+
 const AddProductForm = () => {
   // Form states
   const [validated, setValidated] = useState(false);
@@ -45,12 +53,12 @@ const AddProductForm = () => {
       try {
         await axios.post(`${API_URL}/products`, inputObject);
         setShowAlert(true);
+        setInputObject(initialInputFields);
+        form.reset();
+        setIsLoading(false);
         setTimeout(() => {
           setShowAlert(false);
-          setIsLoading(false);
           setButtonValid(true);
-          setInputObject(initialInputFields);
-          form.reset();
         }, 2500);
       } catch (error) {
         setIsLoading(false);
@@ -66,10 +74,7 @@ const AddProductForm = () => {
   return (
     <>
       {(showAlert || showErrorAlert) && (
-        <Alert
-          className="alert"
-          variant={showErrorAlert ? "danger" : "info"}
-        >
+        <Alert className="alert" variant={showErrorAlert ? "danger" : "info"}>
           {showErrorAlert ? `Error adding product!` : `Product added!`}
         </Alert>
       )}
@@ -102,17 +107,13 @@ const AddProductForm = () => {
           {/* Product Category */}
           <Form.Group className="mb-3">
             <Form.Label>Product Category</Form.Label>
-            <Form.Control
-              required
-              onChange={changeHandler}
-              type="text"
-              placeholder="Category"
-              name="category"
-              value={inputObject.category}
-            />
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid category.
-            </Form.Control.Feedback>
+            <Form.Select name="category" onChange={changeHandler}>
+              {PRODUCTS_CATEGORIES.map((PRODUCTS_CATEGORY) => {
+                return (
+                  <option key={PRODUCTS_CATEGORY}>{PRODUCTS_CATEGORY}</option>
+                );
+              })}
+            </Form.Select>
           </Form.Group>
 
           {/* Product Price */}
