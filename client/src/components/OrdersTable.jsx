@@ -58,7 +58,7 @@ const OrdersTable = ({ orders }) => {
                           onClick={deleteOrderHandler}
                         />
                       </td>
-                      <td>{order.user.username}</td>
+                      <td>{order.user?.username}</td>
                       <td>{order.totalPrice}</td>
                       <td>{order.orderItems[0].productName}</td>
                       <td>{order.orderItems[0].quantity}</td>
